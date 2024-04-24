@@ -7,7 +7,7 @@ import router from './src/routers';
 
 dotenv.config();
 const app: Express = express();
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const cors = require('cors');
 const morgan = require('morgan');
 
@@ -24,7 +24,7 @@ const startServer = async () => {
     try {
       await connectDB();
       app.listen(PORT, () => {
-        console.log(`Server is running on http://localhost:${PORT}`);
+        console.log(`Server is running on Port:${PORT}`);
       });
     } catch (error) {
       console.error('Failed to start server:', error);
