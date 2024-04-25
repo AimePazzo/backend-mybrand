@@ -18,6 +18,12 @@ app.use(bodyParser.json());
 
 app.use('/api/v1/',router)
 
+app.get('/', (req:Request,res:Response)=>{
+  res.status(200).json({
+    message: 'Welcome to my brand API'
+  })
+})
+
 app.use(notFound);
 app.use(errorHandler);
 const startServer = async () => {
