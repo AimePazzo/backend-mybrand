@@ -31,7 +31,7 @@ const postProject = asyncHandler(async (req: Request, res: Response): Promise<vo
         console.log(projectData)
         // TODO: Find the email address if it exists
         const project = await projectRepository.postProject(projectData);
-        res.status(200).json({ projectDetail: project, message: 'Message sent' });
+        res.status(200).json({ projectDetail: project, message: 'Project Created successful!' });
     } catch (error) {
         res.status(500).json({
             message: "Internal server error"
@@ -64,9 +64,24 @@ const getProject = asyncHandler(async (req: Request, res: Response): Promise<voi
 
 const updateProject = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     try {
+        if(!req.file){
+            res.status(400).json({
+                message: "Please upload an image"
+            })
+        }
+        const result = await uploadImages(req.file);
         const id: string = req.params.id;
+        const projectData = {
+            title: req.body.title,
+            description: req.body.description,
+            images: [{
+                public_id: result?.public_id,
+                url: result?.secure_url,
+            }],
+            field: req.body.field
+        }
         validateMongoDbId(id)
-        const updateProject = await projectRepository.updateProject(id, req.body);
+        const updateProject = await projectRepository.updateProject(id, projectData);
         res.status(200).json({ updateProject: updateProject });
     } catch (error) {
         throw new Error('user update error')
