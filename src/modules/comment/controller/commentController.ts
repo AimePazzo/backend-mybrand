@@ -9,7 +9,8 @@ interface ExtendedRequest extends Request {
 const postComment = async (req: ExtendedRequest, res: Response) => {
   try {
     const userId = req.user
-    const data = await commentRepository.postComment(req.body, userId);
+    const id = req.params.id
+    const data = await commentRepository.postComment(req.body,id, userId);
     return res.status(200).json({ status: 200, message: "Success", data });
   } catch (error) {
     return res.status(500).json({ status: 500, error: JSON.stringify(error) });
