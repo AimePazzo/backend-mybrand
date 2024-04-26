@@ -10,7 +10,7 @@ const postComment = async (body: any, id: any,userId:any) => {
 };
 
 const getComments = async () => {
-    return await Comment.find().populate('User');
+    return await Comment.find().populate('user');
 };
 
 export default { postComment, getComments };
