@@ -26,4 +26,14 @@ const getComments = async (req: Request, res: Response) => {
   }
 };
 
-export default { postComment, getComments };
+// TODO: get comment by id
+const getCommentById = async (req: Request, res: Response) => {
+  try {
+    const data = await commentRepository.getCommentById(req.params.id);
+    return res.status(200).json({ status: 200, message: "Success", data });
+  } catch (error) {
+    return res.status(500).json({ status: 500, error: JSON.stringify(error) });
+  }
+}
+
+export default { postComment, getComments, getCommentById};
