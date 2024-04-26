@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.ts",
-    "vercel-build": "echo hello"
+    "dev": "nodemon server.ts"
   },
   "keywords": [],
   "author": "",
