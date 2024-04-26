@@ -95,7 +95,7 @@ const deleteProject = asyncHandler(async (req: Request, res: Response): Promise<
     validateMongoDbId(id)
     try {
         const deleteProject = await projectRepository.deleteProject(id);
-        res.status(200).json(deleteProject);
+        res.status(200).json({message:" Project Deleted",deletedProject:deleteProject});
     } catch (error) {
         throw new Error('User not found')
     }
