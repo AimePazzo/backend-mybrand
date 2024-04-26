@@ -26,6 +26,7 @@ export const authenticateToken = (req: ExtendedRequest, res: Response, next: Nex
 
     jwt.verify(token, jwtSecret, async (err, decoded) => {
         if (err) {
+            localStorage.clear();
             return res.status(401).json({ error: 'Failed to authenticate token' });
         } else {
             const userId = (decoded as any).id;
