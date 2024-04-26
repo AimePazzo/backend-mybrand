@@ -1,13 +1,19 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
 interface CommentsType extends Document {
-    description: string
+    project: any;
+    comment: string
     user: any
     rating: number
 }
 
 const commentSchema: Schema <CommentsType> = new Schema({
-    description: String,
+    project:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref:'Project',
+        required: true
+    },
+    comment: String,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
