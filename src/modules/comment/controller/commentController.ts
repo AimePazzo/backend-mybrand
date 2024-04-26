@@ -1,9 +1,15 @@
 import { Request, Response } from "express";
 import commentRepository from "../repository/commentRepository";
 
-const postComment = async (req: Request, res: Response) => {
+
+interface ExtendedRequest extends Request {
+  user?: string;
+}
+
+const postComment = async (req: ExtendedRequest, res: Response) => {
   try {
-    const data = await commentRepository.postComment(req.body);
+    const userId = req.user
+    const data = await commentRepository.postComment(req.body, userId);
     return res.status(200).json({ status: 200, message: "Success", data });
   } catch (error) {
     return res.status(500).json({ status: 500, error: JSON.stringify(error) });
