@@ -98,13 +98,14 @@ const updateUser = asyncHandler(async (req: Request, res: Response): Promise<voi
 const deleteUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const id: string = req.params.id;
     validateMongoDbId(id)
-    try {
+    
         const deleteUser = await userRepository.deleteUser(id);
-        res.status(200).json(deleteUser);
-    } catch (error) {
-        throw new Error('User not found')
+        if(deleteUser){
+            res.status(200).json(deleteUser);
+        }
+        res.status(400).json({message:'User not found'})
     }
-});
+)
 
 // Login a user
 

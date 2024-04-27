@@ -4,7 +4,31 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.ts"
+    "dev": "nodemon server.ts",
+    "test": "mocha --require ts-node/register './src/modules/**/*.spec.ts' --timeout 300000 --exit",
+    "coverage": "nyc mocha --require ts-node/register 'src/modules/**/*.spec.ts' --timeout 300000 --exit"
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "check-coverage": true,
+    "all": true,
+    "include": [
+      "src/**/!(*.test.*).[tj]s?(x)"
+    ],
+    "exclude": [
+      "src/database/**/*.*",
+      "src/modules/**/controller/*.ts",
+      "src/modules/**/test/*.ts",
+      "src/modules/**/repository/*.ts"
+    ],
+    "reporter": [
+      "html",
+      "lcov",
+      "text",
+      "text-summary"
+    ],
+    "report-dir": "coverage",
+    "lines": 40
   },
   "keywords": [],
   "author": "",
@@ -19,6 +43,7 @@
     "@types/nodemailer": "^6.4.14",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.6",
+    "chai": "^4.4.1",
     "nodemon": "^3.1.0",
     "sharp": "^0.33.3",
     "ts-node": "^10.9.2",
@@ -31,7 +56,6 @@
     "@types/mocha": "^10.0.6",
     "@types/mongoose": "^5.11.97",
     "bcrypt": "^5.1.1",
-    "chai": "^5.1.0",
     "chai-http": "^4.4.0",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
