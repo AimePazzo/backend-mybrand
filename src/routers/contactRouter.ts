@@ -1,14 +1,126 @@
 import express, { Router } from 'express';
 import contactController from '../modules/contact/controller/contactController';
 
-
 const contactRouter: Router = express.Router();
 
-contactRouter.post('/send-message', contactController.postContact);
-contactRouter.get('/get-messages', contactController.getAllContacts);
-contactRouter.get('/get-message/:id', contactController.getContact);
-contactRouter.put('/update-message/:id', contactController.updateContact);
-contactRouter.delete('/delete-message/:id', contactController.deleteContact);
+/**
+ * @swagger
+ * /api/contact/send-message:
+ *   post:
+ *     summary: Send a message
+ *     description: Send a message
+ *     parameters:
+ *       - name: body
+ *         description: Message data
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *             email:
+ *               type: string
+ *             subject:
+ *               type: string
+ *             message:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Successfully sent the message
+ *       500:
+ *         description: Internal server error
+ */
+contactRouter.post('/api/contact/send-message', contactController.postContact);
 
+/**
+ * @swagger
+ * /api/contact/get-messages:
+ *   get:
+ *     summary: Get all messages
+ *     description: Get all messages
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved messages
+ *       500:
+ *         description: Internal server error
+ */
+contactRouter.get('/api/contact/get-messages', contactController.getAllContacts);
+
+/**
+ * @swagger
+ * /api/contact/get-message/{id}:
+ *   get:
+ *     summary: Get a message by ID
+ *     description: Get a message by its ID
+ *     parameters:
+ *       - name: id
+ *         description: Message ID
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the message
+ *       500:
+ *         description: Internal server error
+ */
+contactRouter.get('/api/contact/get-message/:id', contactController.getContact);
+
+/**
+ * @swagger
+ * /api/contact/update-message/{id}:
+ *   put:
+ *     summary: Update a message by ID
+ *     description: Update a message by its ID
+ *     parameters:
+ *       - name: id
+ *         description: Message ID
+ *         in: path
+ *         required: true
+ *         type: string
+ *       - name: body
+ *         description: Message data
+ *         in: body
+ *         required: true
+ *         schema:
+ *           type: object
+ *           properties:
+ *             name:
+ *               type: string
+ *             email:
+ *               type: string
+ *             subject:
+ *               type: string
+ *             message:
+ *               type: string
+ *     responses:
+ *       200:
+ *         description: Successfully updated the message
+ *       500:
+ *         description: Internal server error
+ */
+contactRouter.put('/api/contact/update-message/:id', contactController.updateContact);
+
+/**
+ * @swagger
+ * /api/contact/delete-message/{id}:
+ *   delete:
+ *     summary: Delete a message by ID
+ *     description: Delete a message by its ID
+ *     parameters:
+ *       - name: id
+ *         description: Message ID
+ *         in: path
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: Successfully deleted the message
+ *       500:
+ *         description: Internal server error
+ */
+contactRouter.delete('/api/contact/delete-message/:id', contactController.deleteContact);
 
 export default contactRouter;
+

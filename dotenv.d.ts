@@ -2,7 +2,7 @@ import { Secret } from "jsonwebtoken";
 
 declare namespace NodeJS {
     interface ProcessEnv {
-      [key: string]: string | number;
+      [key: string]: string | undefined;
       MONGODB_URL: string;
       JWT_SECRETKEY:any;
       PORT:number;
@@ -14,6 +14,7 @@ declare namespace NodeJS {
       MAIL_ID:string;
       MP:string;
       SMTP_HOST_PORT:number;
+      BASE_URL:string;
       // Add more variables as needed
     }
   }

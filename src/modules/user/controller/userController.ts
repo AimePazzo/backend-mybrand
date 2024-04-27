@@ -2,26 +2,57 @@ import { generateToken } from "../../../database/config/jwtToken";
 import { Request, Response } from "express"
 import { validateMongoDbId } from "../../../utils/validateMongodbId";
 import userRepository from "../repository/userRepository";
-import { UserModel } from "../../../database/model/userModel";
+import emailController from "../../email/controller/emailController";
+import dotenv from'dotenv';
 
+dotenv.config();
 const asyncHandler = require('express-async-handler')
 
-// Create a new
 
+
+// Create a new
 const createUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     // TODO: Get the email address from req.body
     const email: string = req.body.email;
+    console.log(email);
     // TODO: Find the email address if it exists
-    const findUser = await userRepository.createUser(email);
-    if (!findUser) {
-        const newUser = await UserModel.create(req.body)
-        res.status(200).json({ newUser: newUser, message: 'User Created successful' });
+    const findUser = await userRepository.findUser(email);
+    if (!findUser) { 
+        const newUser = await userRepository.createUser(req.body);
+        const token = await userRepository.createToken(newUser._id);
+        const url = `${process.env.BASE_URL}user/${newUser._id}/verify/${token.token}`;
+        await emailController.verifyEmail(newUser.email,"Verify Email", url);
+        res.status(200).json({ newUser: newUser, message: 'An Email sent to your account please verify' });
     } else {
         res.status(400).json({
             message: "User already exists"
         })
     }
 });
+
+// Verify user if they account verified
+
+const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    const id: string = req.params.id;
+    const token: string = req.params.token;
+    validateMongoDbId(id);
+    const user = await userRepository.findUserById(id);
+    if (user) {
+        const verifyUser = await userRepository.verifyUser(id, token);
+        if (verifyUser) {
+            await userRepository.UpdateUserVerified(id);
+            await userRepository.tokenRemove()
+        res.status(200).json({ message: "Email verified successfully" });
+        } else {
+        res.status(400).json({ message: 'Invalid Token' });
+        }
+    } else {
+        res.status(400).json({
+            message: "User not found"
+        })
+    }
+}
+)
 
 // Get all users
 
@@ -82,18 +113,26 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void
     const password: string = req.body.password;
 
     const user = await userRepository.loginUser(email);
-
-    if (user && (await user?.isPasswordMatched(password))) {
+    if (user && (await user?.isPasswordMatched(password)) && user.verified) {
         const token = generateToken(user?._id);
         res.status(200).json({
             _id: user._id,
             firstName: user.firstName,
             lastName: user.lastName,
             email: user.email,
-            username: user.userName,
+            username: user.userName, 
             token: token
         });
-    } else {
+    } else if(!user?.verified){
+            let token = await userRepository.getToken(user?._id)
+            if(!token){
+                token = await userRepository.createToken(user?._id)
+                const url = `${process.env.BASE_URL}user/${user?._id}/verify/${token.token}`;
+                await emailController.verifyEmail(email,"Verify Email", url);
+            }
+            res.status(400).json({ message: 'An Email sent to your account please verify' });
+    }
+    else {
         res.status(401).json({
             message: "Invalid credentials"
         });
@@ -106,7 +145,6 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void
 const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const email: string = req.body.email;
     const password: string = req.body.password;
-
     const findAdmin = await userRepository.loginUser(email);
     if (findAdmin?.role !== "admin") throw new Error("Not Authorised");
     if (findAdmin && (await findAdmin?.isPasswordMatched(password))) {
@@ -127,4 +165,4 @@ const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<voi
     }
 });
 
-export default {createUser,getAllUsers,updateUser,deleteUser,loginUser,getUser,loginAdmin}
+export default {createUser,getAllUsers,updateUser,deleteUser,loginUser,getUser,loginAdmin,verifyUser}

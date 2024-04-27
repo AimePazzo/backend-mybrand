@@ -6,16 +6,18 @@ import { connectDB } from './src/database/config/Dbconnect';
 import router from './src/routers';
 import cors from 'cors'
 import morgan from 'morgan'
+import swaggerSetup from './swaggerConfig';
 
 dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
 
-
+swaggerSetup(app);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+
 
 app.use('/api/v1/',router)
 

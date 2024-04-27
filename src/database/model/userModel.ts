@@ -8,9 +8,7 @@ export interface IUser extends Document {
   email: string;
   role: string;
   password: string;
-  passwordChangedAt:Date;
-  passwordResetToken:string;
-  passwordResetExpires:Date;
+  verified: boolean;
   timestamps: boolean;
   isPasswordMatched:(password:string) => string;
 }
@@ -24,10 +22,9 @@ const UserSchema: Schema = new Schema({
       default: "user",
     },
     email: {type:'string', required: true},
+    verified: {type:'boolean', default: false},
     password: { type: 'string', required: true},
-    passwordChangedAt:Date,
-    passwordResetToken: String,
-    passwordResetExpires:Date,
+    
 },{
   timestamps: true,
 });
@@ -43,8 +40,7 @@ UserSchema.pre('save',async function (next) {
 });
 UserSchema.methods.isPasswordMatched = async function (enteredPassword: string) {
   return await bcrypt.compare(enteredPassword,this.password);
-};
-
+}
 UserSchema.methods.createPasswordResetToken = async function () {
   const resettoken = crypto.randomBytes(32).toString('hex');
   this.passwordResetToken = crypto
