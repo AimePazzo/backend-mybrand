@@ -34,7 +34,7 @@ const commentRouter = Router();
  *       500:
  *         description: Internal server error
  */
-commentRouter.post("/api/comments/post-comment/:id", authMiddleware.authenticateToken, commentControllers.postComment)
+commentRouter.post("/post-comment/:id", authMiddleware.authenticateToken, commentControllers.postComment)
 
 /**
  * @swagger
@@ -48,7 +48,7 @@ commentRouter.post("/api/comments/post-comment/:id", authMiddleware.authenticate
  *       500:
  *         description: Internal server error
  */
-commentRouter.get("/api/comments/get-comments", authMiddleware.authenticateToken, commentControllers.getComments);
+commentRouter.get("/get-comments", authMiddleware.authenticateToken, commentControllers.getComments);
 
 /**
  * @swagger
@@ -68,6 +68,6 @@ commentRouter.get("/api/comments/get-comments", authMiddleware.authenticateToken
  *       500:
  *         description: Internal server error
  */
-commentRouter.get("/api/comments/get-comment/:id", authMiddleware.authenticateToken, authMiddleware.isAdmin, commentControllers.getCommentById);
+commentRouter.get("/get-comment/:id", authMiddleware.authenticateToken, authMiddleware.isAdmin, commentControllers.getCommentById);
 
 export default commentRouter;

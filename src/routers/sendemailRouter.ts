@@ -28,7 +28,7 @@ const sendEmailRouter : Router = express.Router();
  *       500:
  *         description: Internal server error
  */
-sendEmailRouter.post('/api/v1/email/send-email', emailController.sendEmail);
+sendEmailRouter.post('/send-email', emailController.sendEmail);
 
 /**
  * @swagger
@@ -43,11 +43,11 @@ sendEmailRouter.post('/api/v1/email/send-email', emailController.sendEmail);
  *         schema:
  *           type: object
  *           properties:
- *             userId:
+ *             email:
  *               type: string
  *             subject:
  *               type: string
- *             text:
+ *             message:
  *               type: string
  *     responses:
  *       200:
@@ -55,6 +55,6 @@ sendEmailRouter.post('/api/v1/email/send-email', emailController.sendEmail);
  *       500:
  *         description: Internal server error
  */
-sendEmailRouter.post('/api/v1/email/email-user', emailController.sendEmailToUser);
+sendEmailRouter.post('/email-user', emailController.sendEmailToUser);
 
 export default sendEmailRouter;

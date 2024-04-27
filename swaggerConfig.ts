@@ -15,7 +15,7 @@ const options = {
         },
         servers: [
             {
-                url: 'https://backend-mybrand-xea6.onrender.com',
+                url: 'http://localhost:5000',
             },
         ],
     },
