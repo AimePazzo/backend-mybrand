@@ -4,12 +4,13 @@ import dotenv from'dotenv';
 import {errorHandler, notFound} from './src/middlewares/errorHandler';
 import { connectDB } from './src/database/config/Dbconnect';
 import router from './src/routers';
+import cors from 'cors'
+import morgan from 'morgan'
 
 dotenv.config();
 const app: Express = express();
 const PORT = process.env.PORT || 3000;
-const cors = require('cors');
-const morgan = require('morgan');
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
