@@ -1,6 +1,6 @@
 import Comment from "../../../database/model/comments";
 
-const postComment = async (body: any, id: any,userId:any) => {
+const postComment = async (body: any, id: any, userId: any) => {
     return await Comment.create({
         project: id,
         comment: body.comment,
@@ -21,4 +21,10 @@ const deleteManyComments = async (id: string) => {
     return await Comment.deleteMany({ project: id });
 }
 
-export default { postComment, getComments,getCommentById,deleteManyComments };
+const updateCommentById = async (id: string, body: any) => {
+    return await Comment.findByIdAndUpdate(id,
+        { status: body },
+        { new: true });
+}
+
+export default { postComment, getComments, getCommentById, deleteManyComments, updateCommentById};
