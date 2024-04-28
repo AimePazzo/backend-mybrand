@@ -5,29 +5,32 @@ const sendEmailRouter : Router = express.Router();
 
 /**
  * @swagger
+/**
+ * @swagger
  * /api/v1/email/send-email:
  *   post:
  *     summary: Send email
  *     description: Send an email to the specified recipient
- *     parameters:
- *       - name: body
- *         in: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             to:
- *               type: string
- *             subject:
- *               type: string
- *             text:
- *               type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               subject:
+ *                 type: string
+ *               message:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Email sent successfully
  *       500:
  *         description: Internal server error
  */
+
 sendEmailRouter.post('/send-email', emailController.sendEmail);
 
 /**

@@ -5,7 +5,7 @@ import app from '../../../../server'; // Import your Express app
 
 chai.use(chaiHttp);
 const router = ()=> chai.request(app)
-describe.only('Project Controller', () => {
+describe('Project Controller', () => {
   let projectId:any;
   let token:string;
  const imagePath = 'C:\\Users\\Pazzo\\Pictures\\Camera Roll\\82528385-a73f-488f-9003-513321283a6b.png';

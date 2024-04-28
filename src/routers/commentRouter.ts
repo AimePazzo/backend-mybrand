@@ -9,7 +9,7 @@ const commentRouter = Router();
  * tags:
  *   name: Comment
  *   description: Comment routes
- * /api/comments/post-comment/{id}:
+ * /api/v1/comments/post-comment/{id}:
  *   post:
  *     summary: Post a comment
  *     description: Post a comment on a specific post
@@ -38,7 +38,7 @@ commentRouter.post("/post-comment/:id", authMiddleware.authenticateToken, commen
 
 /**
  * @swagger
- * /api/comments/get-comments:
+ * /api/v1/comments/get-comments:
  *   get:
  *     summary: Get all comments
  *     description: Get all comments
@@ -52,7 +52,7 @@ commentRouter.get("/get-comments", authMiddleware.authenticateToken, commentCont
 
 /**
  * @swagger
- * /api/comments/get-comment/{id}:
+ * /api/v1/comments/get-comment/{id}:
  *   get:
  *     summary: Get a comment by ID
  *     description: Get a comment by its ID
@@ -68,7 +68,7 @@ commentRouter.get("/get-comments", authMiddleware.authenticateToken, commentCont
  *       500:
  *         description: Internal server error
  */
-commentRouter.get("/get-comment/:id", authMiddleware.authenticateToken, authMiddleware.isAdmin, commentControllers.getCommentById);
+commentRouter.get("/get-comment/:id", authMiddleware.authenticateToken, commentControllers.getCommentById);
 
 
 /**
