@@ -4,6 +4,7 @@ import { validateMongoDbId } from "../../../utils/validateMongodbId";
 import userRepository from "../repository/userRepository";
 import emailController from "../../email/controller/emailController";
 import dotenv from'dotenv';
+import '../../../../public/'
 
 dotenv.config();
 const asyncHandler = require('express-async-handler')
@@ -43,7 +44,7 @@ const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<voi
         if (verifyUser) {
             await userRepository.UpdateUserVerified(id);
             await userRepository.tokenRemove()
-            res.redirect("/verify.html");
+            res.redirect("/public/verify.html");
         res.status(200).json({ message: "Email verified successfully" });
         } else {
         res.status(400).json({ message: 'Invalid Token' });
