@@ -31,7 +31,7 @@ const createUser = asyncHandler(async (req: Request, res: Response): Promise<voi
     }
 });
 
-// Verify user if they account verified
+// Verify user
 
 const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const id: string = req.params.id;
