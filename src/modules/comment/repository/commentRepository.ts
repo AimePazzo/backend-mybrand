@@ -17,4 +17,8 @@ const getCommentById = async (id: string) => {
     return await Comment.findById(id).populate('user').populate('project');
 };
 
-export default { postComment, getComments,getCommentById };
+const deleteManyComments = async (id: string) => {
+    return await Comment.deleteMany({ project: id });
+}
+
+export default { postComment, getComments,getCommentById,deleteManyComments };

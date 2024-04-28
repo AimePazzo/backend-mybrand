@@ -3,6 +3,7 @@ import projectRepository from "../repository/projectRepository";
 import { validateMongoDbId } from "../../../utils/validateMongodbId";
 import { resourceLimits } from "worker_threads";
 import uploadImages from "./uploadController";
+import commentRepository from "../../comment/repository/commentRepository";
 
 
 const asyncHandler = require('express-async-handler')
@@ -94,8 +95,9 @@ const deleteProject = asyncHandler(async (req: Request, res: Response): Promise<
     const id: string = req.params.id;
     validateMongoDbId(id)
     try {
-        const deleteProject = await projectRepository.deleteProject(id);
-        res.status(200).json({message:" Project Deleted",deletedProject:deleteProject});
+         await projectRepository.deleteProject(id);
+         await commentRepository.deleteManyComments(id);
+         res.status(200).json({message:" Project and associated comments deleted"});
     } catch (error) {
         throw new Error('User not found')
     }

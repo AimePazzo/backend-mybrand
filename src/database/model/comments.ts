@@ -12,13 +12,15 @@ const commentSchema: Schema <CommentsType> = new Schema({
     project:{
         type: mongoose.Schema.Types.ObjectId,
         ref:'Project',
-        required: true
+        required: true,
+        cascade: true,
     },
     comment: String,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: [true, 'user is required']
+        required: [true, 'user is required'],
+        cascade: true,
         },
     rating: { type: Number, required: [true, 'rating is required'] },
     status: {

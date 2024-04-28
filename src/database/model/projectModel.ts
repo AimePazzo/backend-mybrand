@@ -1,13 +1,13 @@
 import { Schema, model, Document } from "mongoose";
 
-interface Project extends Document {
+export interface ProjectType extends Document {
     title: string;
     images: string[];
     description: string;
     field: string;
 }
 
-const projectSchema = new Schema<Project>(
+const projectSchema = new Schema<ProjectType>(
     {
         title: {
             type: 'string',
@@ -32,6 +32,6 @@ const projectSchema = new Schema<Project>(
     }
 );
 
-const ProjectModel = model<Project>("Project", projectSchema);
+const ProjectModel = model<ProjectType>("Project", projectSchema);
 
 export default ProjectModel;
