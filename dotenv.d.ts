@@ -14,7 +14,8 @@ declare namespace NodeJS {
       MAIL_ID:string;
       MP:string;
       SMTP_HOST_PORT:number;
-      BASE_URL:string;
+      BASE_URL_ONLINE:string;
+      BASE_URL_LOCAL:string;
       // Add more variables as needed
     }
   }

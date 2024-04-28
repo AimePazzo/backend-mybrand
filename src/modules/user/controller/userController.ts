@@ -20,7 +20,7 @@ const createUser = asyncHandler(async (req: Request, res: Response): Promise<voi
     if (!findUser) { 
         const newUser = await userRepository.createUser(req.body);
         const token = await userRepository.createToken(newUser._id);
-        const url = `${process.env.BASE_URL}user/${newUser._id}/verify/${token.token}`;
+        const url = `${process.env.BASE_URL_ONLINE}user/${newUser._id}/verify/${token.token}`;
         await emailController.verifyEmail(newUser.email,"Verify Email", url);
         res.status(200).json({ newUser: newUser, message: 'An Email sent to your account please verify' });
     } else {
@@ -129,7 +129,7 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void
             let token = await userRepository.getToken(user?._id)
             if(!token){
                 token = await userRepository.createToken(user?._id)
-                const url = `${process.env.BASE_URL}user/${user?._id}/verify/${token.token}`;
+                const url = `${process.env.BASE_URL_ONLINE}user/${user?._id}/verify/${token.token}`;
                 await emailController.verifyEmail(email,"Verify Email", url);
             }
             res.status(400).json({ message: 'An Email sent to your account please verify' });
