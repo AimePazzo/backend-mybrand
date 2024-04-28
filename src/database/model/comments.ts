@@ -1,10 +1,11 @@
 import mongoose, { Document, Model, Schema } from "mongoose";
 
-interface CommentsType extends Document {
-    project: any;
-    comment: string
-    user: any
-    rating: number
+export interface CommentsType extends Document {
+    project: mongoose.Schema.Types.ObjectId;
+    comment: string;
+    user: mongoose.Schema.Types.ObjectId;
+    rating: number;
+    status:any;
 }
 
 const commentSchema: Schema <CommentsType> = new Schema({
@@ -20,7 +21,13 @@ const commentSchema: Schema <CommentsType> = new Schema({
         required: [true, 'user is required']
         },
     rating: { type: Number, required: [true, 'rating is required'] },
+    status: {
+        type: 'string',
+        default: "Pending",
+        enum: ["Pending", "Approval", "Not Approved"],
+      },
     },
+    
     {
         timestamps: true
     
