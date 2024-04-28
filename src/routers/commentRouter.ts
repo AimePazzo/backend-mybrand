@@ -73,47 +73,46 @@ commentRouter.get("/get-comment/:id", authMiddleware.authenticateToken, authMidd
 
 /**
  * @swagger
- * paths:
-  /update-comment/{id}:
-    put:
-      summary: Update comment status by ID
-      description: Updates the status of a comment based on the provided comment ID.
-      parameters:
-        - name: id
-          in: path
-          description: Comment ID
-          required: true
-          schema:
-            type: string
-      requestBody:
-        description: Comment status update
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                status:
-                  type: string
-                  enum:
-                    - Approval
-                    - Pending
-                    - Not Approved
-                  default: Pending
-      responses:
-        '200':
-          description: Comment status updated successfully
-        '400':
-          description: Invalid input or bad request
-        '401':
-          description: Unauthorized (requires authentication)
-        '403':
-          description: Forbidden (requires admin privileges)
-        '404':
-          description: Comment not found
-        '500':
-          description: Internal server error
-
+ * /api/v1/comment/update-comment/{id}:
+ *   put:
+ *     summary: Update comment status by ID
+ *     description: Updates the status of a comment based on the provided comment ID.
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         description: Comment ID
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       description: Comment status update
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum:
+ *                   - Approval
+ *                   - Pending
+ *                   - Not Approved
+ *                 default: Pending
+ *     responses:
+ *       '200':
+ *         description: Comment status updated successfully
+ *       '400':
+ *         description: Invalid input or bad request
+ *       '401':
+ *         description: Unauthorized (requires authentication)
+ *       '403':
+ *         description: Forbidden (requires admin privileges)
+ *       '404':
+ *         description: Comment not found
+ *       '500':
+ *         description: Internal server error
  */
+
 commentRouter.put("/update-comment/:id", authMiddleware.authenticateToken, authMiddleware.isAdmin, commentControllers.updateCommentById);
 export default commentRouter;
