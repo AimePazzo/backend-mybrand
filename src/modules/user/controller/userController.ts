@@ -4,7 +4,7 @@ import { validateMongoDbId } from "../../../utils/validateMongodbId";
 import userRepository from "../repository/userRepository";
 import emailController from "../../email/controller/emailController";
 import dotenv from'dotenv';
-import '../../../../public/'
+
 
 dotenv.config();
 const asyncHandler = require('express-async-handler')
