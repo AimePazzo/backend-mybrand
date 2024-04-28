@@ -35,7 +35,6 @@ const createUser = asyncHandler(async (req: Request, res: Response): Promise<voi
 const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const id: string = req.params.id;
     const token: string = req.params.token;
-    console.log(id, token);
     validateMongoDbId(id);
     const user = await userRepository.findUserById(id);
     if (user) {
