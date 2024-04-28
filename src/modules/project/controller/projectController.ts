@@ -1,7 +1,8 @@
 import { Request, Response } from "express"
 import projectRepository from "../repository/projectRepository";
 import { validateMongoDbId } from "../../../utils/validateMongodbId";
-import { resourceLimits } from "worker_threads";
+import userRepository from "../../user/repository/userRepository";
+import emailController from "../../email/controller/emailController";
 import uploadImages from "./uploadController";
 import commentRepository from "../../comment/repository/commentRepository";
 
@@ -33,6 +34,13 @@ const postProject = asyncHandler(async (req: Request, res: Response): Promise<vo
         // TODO: Find the email address if it exists
         const project = await projectRepository.postProject(projectData);
         res.status(200).json({ projectDetail: project, message: 'Project Created successful!' });
+        // Send email to all users
+        const users = await userRepository.getAllUser();
+        const emailPromises = users.map(async (user) => {
+            const url = `${process.env.BASE_URL}/projects/${project._id}`;
+            await emailController.verifyEmail(user.email, "New Project Added", `A new project has been added. Click here to view: ${url}`);
+        });
+        await Promise.all(emailPromises);
     } catch (error) {
         res.status(500).json({
             message: "Internal server error"
