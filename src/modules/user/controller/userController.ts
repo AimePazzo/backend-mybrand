@@ -42,7 +42,7 @@ const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<voi
         if (verifyUser) {
             await userRepository.UpdateUserVerified(id);
             await userRepository.tokenRemove()
-            res.redirect("verify.html");
+            res.redirect("/verify.html");
         res.status(200).json({ message: "Email verified successfully" });
         } else {
         res.status(400).json({ message: 'Invalid Token' });
