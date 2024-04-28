@@ -39,6 +39,7 @@ const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<voi
     const user = await userRepository.findUserById(id);
     if (user) {
         const verifyUser = await userRepository.verifyUser(id, token);
+        console.log(verifyUser)
         if (verifyUser) {
             await userRepository.UpdateUserVerified(id);
             await userRepository.tokenRemove()
