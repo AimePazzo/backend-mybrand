@@ -40,7 +40,10 @@ const getCommentById = async (req: Request, res: Response) => {
 
 const updateCommentById = async (req: Request, res: Response) => {
   try {
-    const data = await commentRepository.updateCommentById(req.params.id, req.body);
+    const id = req.params.id;
+    const status = req.body.status;
+    const data = await commentRepository.updateCommentById(id, status);
+    console.log(data);
     return res.status(200).json({ status: 200, message: "Comment status updated successfully", data });
   } catch (error) {
     return res.status(500).json({ status: 500, error: JSON.stringify(error) });
