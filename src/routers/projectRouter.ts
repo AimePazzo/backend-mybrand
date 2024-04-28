@@ -40,7 +40,7 @@ const projectRouter: Router = express.Router();
  *       500:
  *         description: Internal server error
  */
-projectRouter.post('/api/project/post-project', authMiddleware.authenticateToken,
+projectRouter.post('/post-project', authMiddleware.authenticateToken,
     authMiddleware.isAdmin,
     upload.single("image"),projectController.postProject);
 
@@ -62,7 +62,7 @@ projectRouter.post('/api/project/post-project', authMiddleware.authenticateToken
  *       500:
  *         description: Internal server error
  */
-projectRouter.get('/api/project/get-projects',authMiddleware.authenticateToken, projectController.getAllProjects);
+projectRouter.get('/get-projects',authMiddleware.authenticateToken, projectController.getAllProjects);
 
 /**
  * @swagger
@@ -87,7 +87,7 @@ projectRouter.get('/api/project/get-projects',authMiddleware.authenticateToken, 
  *       500:
  *         description: Internal server error
  */
-projectRouter.get('/api/project/get-project/:id',authMiddleware.authenticateToken, projectController.getProject);
+projectRouter.get('/get-project/:id',authMiddleware.authenticateToken, projectController.getProject);
 
 /**
  * @swagger
@@ -131,7 +131,7 @@ projectRouter.get('/api/project/get-project/:id',authMiddleware.authenticateToke
  *       500:
  *         description: Internal server error
  */
-projectRouter.put('/api/project/update-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin,upload.single("image"), projectController.updateProject);
+projectRouter.put('/update-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin,upload.single("image"), projectController.updateProject);
 
 /**
  * @swagger
@@ -156,6 +156,6 @@ projectRouter.put('/api/project/update-project/:id',authMiddleware.authenticateT
  *       500:
  *         description: Internal server error
  */
-projectRouter.delete('/api/project/delete-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin, projectController.deleteProject);
+projectRouter.delete('/delete-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin, projectController.deleteProject);
 
 export default projectRouter;

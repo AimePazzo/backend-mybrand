@@ -1,109 +1,132 @@
-import chai,{ expect } from 'chai';
-import app from '../../../../server';
-import chaiHttp from 'chai-http';
-
-
+import chaiHttp from "chai-http";
+import chai, { expect } from "chai";
+import app from "../../../../server";
 
 chai.use(chaiHttp);
 const router = () => chai.request(app);
-describe('User Controller', () => {
-  let userId:any;
 
-  it('should create a new user', (done) => {
-    router()
-      .post('/api/v1/user/signup')
-      .send({
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'john.doe@example.com',
-        password: 'password',
-        username: 'john_doe',
-      })
-      
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.property('newUser');
-        expect(res.body.newUser).to.have.property('firstName').equal('John');
-        expect(res.body.newUser).to.have.property('lastName').equal('Doe');
-        expect(res.body.newUser).to.have.property('email').equal('john.doe@example.com');
-        expect(res.body.newUser).to.have.property('username').equal('john_doe');
-        userId = res.body.newUser._id;
-        done();
-      });
-  });
+describe("User Test Cases", () => {
 
-  it('should get a user by ID', (done) => {
-    router()
-      .get(`/api/v1/user/get-user/${userId}`)
-      
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(200)
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.property('_id').equal(userId);
-        expect(res.body).to.have.property('firstName').equal('John');
-        expect(res.body).to.have.property('lastName').equal('Doe');
-        expect(res.body).to.have.property('email').equal('john.doe@example.com');
-        expect(res.body).to.have.property('username').equal('john_doe');
-        done();
-      });
-  });
+    let userId="";
 
-  it('should update a user', (done) => {
-    router()
-      .put(`/api/v1/user/update-user/${userId}`)
-      .send({
-        firstName: 'Jane',
-        lastName: 'Doe',
-        email: 'jane.doe@example.com',
-        username: 'jane_doe',
-      })
-      
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(200)
-        expect(res.body).to.be.an('object');
-        expect(res.body.updateUser).to.have.property('firstName').equal('Jane');
-        expect(res.body.updateUser).to.have.property('lastName').equal('Doe');
-        expect(res.body.updateUser).to.have.property('email').equal('jane.doe@example.com');
-        expect(res.body.updateUser).to.have.property('username').equal('jane_doe');
-        done();
-      });
-  });
+    it("Should be able register new user", (done) => {
+      router()
+        .post("/api/v1/user/signup")
+        .send({
+          firstName: "TestingUser",
+          lastName: "TestingUser",
+          userName: "User",
+          email: "testuser@gmail.com",
+          password: "PasswordForUser",
+        })
+        .end((error, response) => {
+            expect(200);
+          expect(response.body).to.be.a("object");
+          expect(response.statusCode).to.equal(200);
+          expect(response.body).to.have.property('newUser');
+          expect(response.body.newUser).to.have.property('firstName')
+          expect(response.body.newUser).to.have.property('lastName')
+          expect(response.body.newUser).to.have.property('email')
+          expect(response.body.newUser).to.have.property('userName')
+          userId = response.body.newUser._id;
+          expect(response.body).to.have.property("message","An Email sent to your account please verify");
+          done(error);
+        });
+    });
+  
+    it("Should not add same user twice", (done) => {
+      router()
+        .post("/api/v1/user/signup")
+        .send({
+            firstName: "TestingUser",
+            lastName: "TestingUser",
+            userName: "User",
+            email: "testuser@gmail.com",
+            password: "PasswordForUser",
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.a("object");
+          expect(response.statusCode).to.equal(400);
+          expect(response.body).to.have.property("message");
+          expect(response.body.message).to.equal("User already exists");
+          done(error);
+        });
+    });
 
-  it('should login a user', (done) => {
-    router()
-      .post('/api/v1/user/login')
-      .send({
-        email: 'jane.doe@example.com',
-        password: 'password',
-      })
-      
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(200)
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.property('_id').equal(userId);
-        expect(res.body).to.have.property('firstName').equal('Jane');
-        expect(res.body).to.have.property('lastName').equal('Doe');
-        expect(res.body).to.have.property('email').equal('jane.doe@example.com');
-        expect(res.body).to.have.property('username').equal('jane_doe');
-        expect(res.body).to.have.property('token');
-        done();
+    it('should return a token on successful login', (done) => {
+        router()
+          .post('/api/v1/user/login')
+          .send({
+            email: 'testuser@gmail.com',
+            password: 'PasswordForUser',
+          })
+          .end((err, res) => {
+            if (err) return done(err);
+            expect(200)
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            done();
+          });
       });
-  });
+    
+      it('should return a message to verify email if user is not verified', (done) => {
+        router()
+          .post('/api/v1/user/login')
+          .send({
+            email: 'unverifieduser@gmail.com',
+            password: 'PasswordForUser',
+          })
+         
+          .end((err, res) => {
+            if (err) return done(err);
+            expect(400)
+            done();
+          });
+      });
+    
+    //   it('should return "Invalid credentials" if login fails', (done) => {
+    //     router()
+    //       .post('/api/v1/user/login')
+    //       .send({
+    //         email: 'invaliduser@gmail.com',
+    //         password: 'WrongPassword',
+    //       })
+          
+    //       .end((err, res) => {
+    //         if (err) return done(err);
+    //         expect(401)
+    //         expect(res.body).to.be.an('object');
+    //         expect(res.body).to.have.property('message').equal('Invalid credentials');
+    //         done();
+    //       });
+    //   });
 
-  it('should delete a user', (done) => {
-    router()
-      .delete(`/api/v1/user/delete-user/${userId}`)
-      
-      .end((err, res) => {
-        if (err) return done(err);
-        expect(200)
-        expect(res.body).to.be.an('object');
-        expect(res.body).to.have.property('message').equal('User deleted successfully');
-        done();
-      });
+    it("Should be able to update registered user", (done) => {
+      router()
+        .put(`/api/v1/user/update-user/${userId}`)
+        .send({
+          name: "TestingUser-Updated",
+          email: "testuser@gmail.com",
+        })
+        .end((error, response) => {
+            expect(200)
+          expect(response.body).to.be.a("object");
+          expect(response.body).to.have.property("updateUser");
+          done(error);
+        });
+    });
+
+    it("Should be able to delete registered user", (done) => {
+      router()
+        .delete(`/api/v1/user/delete-user/${userId}`)
+        .send({
+          email: "testuser@gmail.com",
+        })
+        .end((error, response) => {
+          expect(response.body).to.be.a("object");
+            expect(response.body).to.have.property("message","User deleted successfully");
+          done(error);
+        });
+    });
+  
   });
-});

@@ -101,7 +101,8 @@ const deleteUser = asyncHandler(async (req: Request, res: Response): Promise<voi
     
         const deleteUser = await userRepository.deleteUser(id);
         if(deleteUser){
-            res.status(200).json(deleteUser);
+            res.status(200).json({deleteUser:deleteUser ,message:"User deleted successfully"});
+            return
         }
         res.status(400).json({message:'User not found'})
     }
