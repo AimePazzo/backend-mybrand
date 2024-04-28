@@ -4,6 +4,7 @@ import dotenv from'dotenv';
 import {errorHandler, notFound} from './src/middlewares/errorHandler';
 import { connectDB } from './src/database/config/Dbconnect';
 import router from './src/routers';
+import path from 'path';
 import cors from 'cors'
 import morgan from 'morgan'
 import swaggerSetup from './swaggerConfig';
@@ -18,7 +19,7 @@ app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 
-
+app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/',router)
 
 app.get('/', (req:Request,res:Response)=>{
