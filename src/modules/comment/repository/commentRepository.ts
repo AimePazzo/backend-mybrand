@@ -15,7 +15,7 @@ const getComments = async () => {
 
 const getCommentById = async (id: string) => {
     console.log(id)
-    return await Comment.findOne({project:id}).populate('user').populate('project');
+    return await Comment.find({project:id}).populate('user').populate('project');
 };
 
 const deleteManyComments = async (id: string) => {
