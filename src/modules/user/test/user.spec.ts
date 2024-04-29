@@ -1,6 +1,8 @@
 import chaiHttp from "chai-http";
 import chai, { expect } from "chai";
 import app from "../../../../server";
+import sinon from "sinon";
+import userRepository from "../repository/userRepository";
 
 chai.use(chaiHttp);
 const router = () => chai.request(app);
@@ -8,6 +10,7 @@ const router = () => chai.request(app);
 describe("User Test Cases", () => {
 
     let userId="";
+    let token="";
 
     it("Should be able register new user", (done) => {
       router()
@@ -29,11 +32,72 @@ describe("User Test Cases", () => {
           expect(response.body.newUser).to.have.property('email')
           expect(response.body.newUser).to.have.property('userName')
           userId = response.body.newUser._id;
+          token = response.body.token.token;
           expect(response.body).to.have.property("message","An Email sent to your account please verify");
           done(error);
         });
     });
-  
+        // it("should verify user email", async () => {
+    
+        //   // Stub the findUserById function from userRepository
+        //   const findUserByIdStub = sinon.stub(userRepository, "findUserById").resolves();
+    
+        //   // Stub the verifyUser function from userRepository
+        //   const verifyUserStub = sinon.stub(userRepository, "verifyUser").resolves();
+    
+        //   // Stub the UpdateUserVerified function from userRepository
+        //   const updateUserVerifiedStub = sinon.stub(userRepository, "UpdateUserVerified").resolves();
+    
+        //   const res = await chai
+        //     .request(app)
+        //     .get(`/api/v1/users/${userId}/verify/${token}`);
+    
+        //   expect(res).to.redirectTo("public/verify.html");
+        //   expect(res).to.have.status(200);
+    
+        //   // Restore the stubbed functions
+        //   findUserByIdStub.restore();
+        //   verifyUserStub.restore();
+        //   updateUserVerifiedStub.restore();
+        // });
+    
+        // it("should return error for invalid token", async () => {
+          
+    
+        //   // Stub the findUserById function from userRepository
+        //   const findUserByIdStub = sinon.stub(userRepository, "findUserById").resolves();
+        //   const verifyUserStub = sinon.stub(userRepository, "verifyUser").resolves();
+        //   // Stub the verifyUser function from userRepository
+        //   const res = await chai
+        //     .request(app)
+        //     .get(`/api/v1/users/${userId}/verify/${token}`);
+    
+        //   expect(res).to.have.status(400);
+        //   expect(res.body.message).to.equal("Invalid Token");
+          
+          
+        //   // Restore the stubbed functions
+        //   findUserByIdStub.restore();
+        //   verifyUserStub.restore();
+        // });
+    
+        // it("should return error for user not found", async () => {
+        //   const mockUserId = "non-existing-user-id";
+        //   const mockToken = "mock-token";
+    
+        //   // Stub the findUserById function from userRepository
+        //   const findUserByIdStub = sinon.stub(userRepository, "findUserById").resolves(null);
+    
+        //   const res = await chai
+        //     .request(app)
+        //     .get(`/api/v1/users/${mockUserId}/verify/${mockToken}`);
+    
+        //   expect(res).to.have.status(400);
+        //   expect(res.body.message).to.equal("User not found");
+    
+        //   // Restore the stubbed functions
+        //   findUserByIdStub.restore();
+        // });
     it("Should not add same user twice", (done) => {
       router()
         .post("/api/v1/user/signup")
@@ -80,26 +144,14 @@ describe("User Test Cases", () => {
           .end((err, res) => {
             if (err) return done(err);
             expect(400)
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message');
+            expect(res.body.message).to.equal("An Email sent to your account please verify")
             done();
           });
       });
     
-    //   it('should return "Invalid credentials" if login fails', (done) => {
-    //     router()
-    //       .post('/api/v1/user/login')
-    //       .send({
-    //         email: 'invaliduser@gmail.com',
-    //         password: 'WrongPassword',
-    //       })
-          
-    //       .end((err, res) => {
-    //         if (err) return done(err);
-    //         expect(401)
-    //         expect(res.body).to.be.an('object');
-    //         expect(res.body).to.have.property('message').equal('Invalid credentials');
-    //         done();
-    //       });
-    //   });
+      
 
     it("Should be able to update registered user", (done) => {
       router()
@@ -128,5 +180,4 @@ describe("User Test Cases", () => {
           done(error);
         });
     });
-  
-  });
+});

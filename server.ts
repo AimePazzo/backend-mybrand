@@ -15,9 +15,7 @@ const PORT = process.env.PORT || 3000;
 
 swaggerSetup(app);
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors({
-  origin: 'https://aimepazzo.github.io'
-}));
+app.use(cors());
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 

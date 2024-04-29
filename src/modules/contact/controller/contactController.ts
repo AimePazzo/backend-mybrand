@@ -66,8 +66,8 @@ const deleteContact = asyncHandler(async (req: Request, res: Response): Promise<
     const id: string = req.params.id;
     validateMongoDbId(id)
     try {
-        const deleteContact = await contactRepository.deleteContact(id);
-        res.status(200).json(deleteContact);
+         await contactRepository.deleteContact(id);
+        res.status(200).json({message:"Message deleted successfully"});
     } catch (error) {
         throw new Error('User not found')
     }

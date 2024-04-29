@@ -1,38 +1,44 @@
 import { Request, Response } from "express";
-import nodemailer from "nodemailer";
+import nodemailer, { SendMailOptions } from "nodemailer";
 import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
+
 const transporter = nodemailer.createTransport({
     host: process.env.SMTP_HOST,
-    port:Number( process.env.SMTP_HOST_PORT),
+    port: Number(process.env.SMTP_HOST_PORT),
     secure: true,
     auth: {
         user: process.env.MAIL_ID,
         pass: process.env.MP
     }
 });
+
 const sendEmail = async (req: Request, res: Response) => {
     const name = req.body.userName;
     const email = req.body.email;
     const subject = req.body.subject;
     const message = req.body.message;
 
-    const mailOptionsGmail = {
+    const mailOptionsGmail: SendMailOptions = {
         from: process.env.MAIL_ID,
         to: process.env.MAIL_ID,
         subject: subject,
         text: `From: ${name}\n\nEmail: ${email}\n\n${message}`
     };
+
     transporter.sendMail(mailOptionsGmail, (error, info) => {
         if (error) {
             console.log(error);
+            res.status(500).json({
+                message: "Email could not be sent"
+            });
         } else {
             console.log("Email sent: " + info.response);
+            res.status(200).json({
+                message: "Email sent successfully"
+            });
         }
-    });
-    res.status(200).json({
-        message: "Email sent successfully"
     });
 };
 
@@ -41,32 +47,36 @@ const sendEmailToUser = async (req: Request, res: Response) => {
     const subject = req.body.subject;
     const message = req.body.message;
 
-    const mailOptionsGmail = {
+    const mailOptionsGmail: SendMailOptions = {
         from: process.env.MAIL_ID,
         to: email,
         subject: subject,
         text: message
     };
+
     transporter.sendMail(mailOptionsGmail, (error, info) => {
         if (error) {
             console.log(error);
+            res.status(500).json({
+                message: "Email could not be sent"
+            });
         } else {
             console.log("Email sent: " + info.response);
+            res.status(200).json({
+                message: "Email sent successfully"
+            });
         }
-    });
-    res.status(200).json({
-        message: "Email sent successfully"
     });
 };
 
-
-const verifyEmail = (email: string,subject: string,message: string) => {
-    const mailOptionsVerify = {
+const verifyEmail = (email: string, subject: string, message: string) => {
+    const mailOptionsVerify: SendMailOptions = {
         from: process.env.MAIL_ID,
         to: email,
         subject: subject,
         text: message
     };
+
     transporter.sendMail(mailOptionsVerify, (error, info) => {
         if (error) {
             console.log(error);
@@ -74,6 +84,6 @@ const verifyEmail = (email: string,subject: string,message: string) => {
             console.log("Email sent: " + info.response);
         }
     });
-}
+};
 
-export default {sendEmail, verifyEmail, sendEmailToUser};
+export default { sendEmail, verifyEmail, sendEmailToUser };

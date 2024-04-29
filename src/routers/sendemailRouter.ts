@@ -2,9 +2,6 @@ import express, { Router } from "express";
 import emailController from "../modules/email/controller/emailController";
 
 const sendEmailRouter : Router = express.Router();
-
-/**
- * @swagger
 /**
  * @swagger
  * /api/v1/email/send-email:
@@ -39,19 +36,19 @@ sendEmailRouter.post('/send-email', emailController.sendEmail);
  *   post:
  *     summary: Send email to user
  *     description: Send an email to a user
- *     parameters:
- *       - name: body
- *         in: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
- *             subject:
- *               type: string
- *             message:
- *               type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               subject:
+ *                 type: string
+ *               message:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Email sent to user successfully
@@ -59,5 +56,6 @@ sendEmailRouter.post('/send-email', emailController.sendEmail);
  *         description: Internal server error
  */
 sendEmailRouter.post('/email-user', emailController.sendEmailToUser);
+
 
 export default sendEmailRouter;
