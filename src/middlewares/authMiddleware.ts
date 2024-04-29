@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import asyncHandler from 'express-async-handler';
-import { UserModel } from '../database/model/userModel';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -26,7 +25,6 @@ export const authenticateToken = (req: ExtendedRequest, res: Response, next: Nex
 
     jwt.verify(token, jwtSecret, async (err, decoded) => {
         if (err) {
-            localStorage.clear();
             return res.status(401).json({ error: 'Failed to authenticate token' });
         } else {
             const userId = (decoded as any).id;
