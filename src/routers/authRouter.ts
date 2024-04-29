@@ -21,7 +21,6 @@ const authRouter: Router = express.Router();
  *         type: string
  *       password:
  *         type: string
- *     
  */
 
 /**
@@ -45,6 +44,7 @@ const authRouter: Router = express.Router();
  *         schema:
  *           $ref: '#/definitions/User'
  */
+
 authRouter.post('/signup', userController.createUser);
 
 
@@ -64,6 +64,7 @@ authRouter.post('/signup', userController.createUser);
  *           items:
  *             $ref: '#/definitions/User'
  */
+
 authRouter.get('/get-users', userController.getAllUsers);
 
 /**
@@ -86,8 +87,8 @@ authRouter.get('/get-users', userController.getAllUsers);
  *         schema:
  *           $ref: '#/definitions/User'
  */
-authRouter.get('/get-user/:id', userController.getUser);
 
+authRouter.get('/get-user/:id', userController.getUser);
 
 /**
  * @swagger
@@ -115,8 +116,8 @@ authRouter.get('/get-user/:id', userController.getUser);
  *         schema:
  *           $ref: '#/definitions/User'
  */
-authRouter.put('/update-user/:id', userController.updateUser);
 
+authRouter.put('/update-user/:id', userController.updateUser);
 
 /**
  * @swagger
@@ -138,6 +139,7 @@ authRouter.put('/update-user/:id', userController.updateUser);
  *         schema:
  *           $ref: '#/definitions/User'
  */
+
 authRouter.delete('/delete-user/:id', userController.deleteUser);
 
 
@@ -167,6 +169,7 @@ authRouter.delete('/delete-user/:id', userController.deleteUser);
  *         schema:
  *           $ref: '#/definitions/User'
  */
+
 authRouter.post('/login', userController.loginUser);
 
 
@@ -196,6 +199,7 @@ authRouter.post('/login', userController.loginUser);
  *         schema:
  *           $ref: '#/definitions/User'
  */
+
 authRouter.post('/admin-login', userController.loginAdmin);
 
 
@@ -224,6 +228,7 @@ authRouter.post('/admin-login', userController.loginAdmin);
  *       400:
  *         description: Invalid token
  */
+
 authRouter.get('/:id/verify/:token', userController.verifyUser);
 
 
