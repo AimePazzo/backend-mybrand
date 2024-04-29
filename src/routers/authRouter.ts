@@ -37,13 +37,25 @@ const authRouter: Router = express.Router();
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/User'
+ *           type: object
+ *           properties:
+ *             firstName:
+ *               type: string
+ *             lastName:
+ *               type: string
+ *             userName:
+ *               type: string
+ *             email:
+ *               type: string
+ *             password:
+ *               type: string
  *     responses:
  *       200:
  *         description: Return created user and message
  *         schema:
  *           $ref: '#/definitions/User'
  */
+
 
 authRouter.post('/signup', userController.createUser);
 
