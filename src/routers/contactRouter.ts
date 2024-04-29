@@ -21,7 +21,7 @@ const contactRouter: Router = express.Router();
 
 /**
  * @swagger
- * /api/contact/send-message:
+ * /api/v1/contact/send-message:
  *   post:
  *     summary: Send a message
  *     description: Send a message
@@ -43,7 +43,7 @@ contactRouter.post('/send-message', contactController.postContact);
 
 /**
  * @swagger
- * /api/contact/get-messages:
+ * /api/v1/contact/get-messages:
  *   get:
  *     summary: Get all messages
  *     description: Get all messages
@@ -58,7 +58,7 @@ contactRouter.get('/get-messages', contactController.getAllContacts);
 
 /**
  * @swagger
- * /api/contact/get-message/{id}:
+ * /api/v1/contact/get-message/{id}:
  *   get:
  *     summary: Get a message by ID
  *     description: Get a message by its ID
@@ -79,7 +79,7 @@ contactRouter.get('/get-message/:id', contactController.getContact);
 
 /**
  * @swagger
- * /api/contact/update-message/{id}:
+ * /api/v1/contact/update-message/{id}:
  *   put:
  *     summary: Update a message by ID
  *     description: Update a message by its ID
@@ -106,7 +106,7 @@ contactRouter.put('/update-message/:id', contactController.updateContact);
 
 /**
  * @swagger
- * /api/contact/delete-message/{id}:
+ * /api/v1/contact/delete-message/{id}:
  *   delete:
  *     summary: Delete a message by ID
  *     description: Delete a message by its ID
