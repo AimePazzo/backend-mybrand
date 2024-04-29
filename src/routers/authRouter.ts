@@ -208,9 +208,36 @@ authRouter.post('/login', userController.loginUser);
  *     responses:
  *       200:
  *         description: Return admin details and authentication token
- *         schema:
- *           $ref: '#/definitions/User'
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                 firstName:
+ *                   type: string
+ *                 lastName:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
+
 
 authRouter.post('/admin-login', userController.loginAdmin);
 
