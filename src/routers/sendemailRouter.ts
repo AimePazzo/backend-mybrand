@@ -15,6 +15,8 @@ const sendEmailRouter : Router = express.Router();
  *           schema:
  *             type: object
  *             properties:
+ *               userName:
+ *                 type: string
  *               email:
  *                 type: string
  *               subject:

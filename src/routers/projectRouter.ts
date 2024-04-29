@@ -29,17 +29,18 @@ const projectRouter: Router = express.Router();
  *         in: formData
  *         type: string
  *         required: true
- *       - name: images
+ *       - name: image
  *         in: formData
- *         type: array
- *         items:
- *           type: file
+ *         type: file
  *     responses:
  *       200:
  *         description: Successfully posted the project
+ *       400:
+ *         description: Bad request. Image not provided.
  *       500:
  *         description: Internal server error
  */
+
 projectRouter.post('/post-project', authMiddleware.authenticateToken,
     authMiddleware.isAdmin,
     upload.single("image"),projectController.postProject);
@@ -62,6 +63,7 @@ projectRouter.post('/post-project', authMiddleware.authenticateToken,
  *       500:
  *         description: Internal server error
  */
+
 projectRouter.get('/get-projects',authMiddleware.authenticateToken, projectController.getAllProjects);
 
 /**
@@ -87,6 +89,7 @@ projectRouter.get('/get-projects',authMiddleware.authenticateToken, projectContr
  *       500:
  *         description: Internal server error
  */
+
 projectRouter.get('/get-project/:id',authMiddleware.authenticateToken, projectController.getProject);
 
 /**
@@ -96,7 +99,7 @@ projectRouter.get('/get-project/:id',authMiddleware.authenticateToken, projectCo
  *     summary: Update a project by ID
  *     description: Update a project by its ID
  *     consumes:
- *       -multipart/form-data
+ *       - multipart/form-data
  *     parameters:
  *       - name: Authorization
  *         in: header
@@ -120,17 +123,18 @@ projectRouter.get('/get-project/:id',authMiddleware.authenticateToken, projectCo
  *         in: formData
  *         type: string
  *         required: true
- *       - name: images
+ *       - name: image
  *         in: formData
  *         type: file
- *         items:
- *           type: file
  *     responses:
  *       200:
  *         description: Successfully updated the project
+ *       400:
+ *         description: Bad request. Image not provided.
  *       500:
  *         description: Internal server error
  */
+
 projectRouter.put('/update-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin,upload.single("image"), projectController.updateProject);
 
 /**
@@ -156,6 +160,7 @@ projectRouter.put('/update-project/:id',authMiddleware.authenticateToken,authMid
  *       500:
  *         description: Internal server error
  */
+
 projectRouter.delete('/delete-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin, projectController.deleteProject);
 
 export default projectRouter;
