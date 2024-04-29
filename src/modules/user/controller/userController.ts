@@ -154,17 +154,19 @@ const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<voi
     const email: string = req.body.email;
     const password: string = req.body.password;
     const findAdmin = await userRepository.loginUser(email);
-    if (findAdmin?.role !== "admin") throw new Error("Not Authorised");
-    if (findAdmin && (await findAdmin?.isPasswordMatched(password))) {
+    if (!findAdmin || findAdmin.role !== "admin") {
+         res.status(401).json({ message: "Not Authorized" });
+    }
+    if (await findAdmin?.isPasswordMatched(password)) {
         const token = generateToken(findAdmin?._id);
         res.status(200).json({
-            _id: findAdmin._id,
-            firstName: findAdmin.firstName,
-            lastName: findAdmin.lastName,
-            email: findAdmin.email,
-            username: findAdmin.userName,
+            _id: findAdmin?._id,
+            firstName: findAdmin?.firstName,
+            lastName: findAdmin?.lastName,
+            email: findAdmin?.email,
+            username: findAdmin?.userName,
             token: token,
-            message:"login successful"
+            message: "Login successful"
         });
     } else {
         res.status(401).json({
