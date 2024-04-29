@@ -5,6 +5,22 @@ const contactRouter: Router = express.Router();
 
 /**
  * @swagger
+ * definitions:
+ *   Contact:
+ *     type: object
+ *     properties:
+ *       name:
+ *         type: string
+ *       email:
+ *         type: string
+ *       subject:
+ *         type: string
+ *       message:
+ *         type: string
+ */
+
+/**
+ * @swagger
  * /api/contact/send-message:
  *   post:
  *     summary: Send a message
@@ -15,22 +31,14 @@ const contactRouter: Router = express.Router();
  *         in: body
  *         required: true
  *         schema:
- *           type: object
- *           properties:
- *             name:
- *               type: string
- *             email:
- *               type: string
- *             subject:
- *               type: string
- *             message:
- *               type: string
+ *           $ref: '#/definitions/Contact'
  *     responses:
  *       200:
  *         description: Successfully sent the message
  *       500:
  *         description: Internal server error
  */
+
 contactRouter.post('/send-message', contactController.postContact);
 
 /**
@@ -45,6 +53,7 @@ contactRouter.post('/send-message', contactController.postContact);
  *       500:
  *         description: Internal server error
  */
+
 contactRouter.get('/get-messages', contactController.getAllContacts);
 
 /**
@@ -65,6 +74,7 @@ contactRouter.get('/get-messages', contactController.getAllContacts);
  *       500:
  *         description: Internal server error
  */
+
 contactRouter.get('/get-message/:id', contactController.getContact);
 
 /**
@@ -84,22 +94,14 @@ contactRouter.get('/get-message/:id', contactController.getContact);
  *         in: body
  *         required: true
  *         schema:
- *           type: object
- *           properties:
- *             name:
- *               type: string
- *             email:
- *               type: string
- *             subject:
- *               type: string
- *             message:
- *               type: string
+ *           $ref: '#/definitions/Contact'
  *     responses:
  *       200:
  *         description: Successfully updated the message
  *       500:
  *         description: Internal server error
  */
+
 contactRouter.put('/update-message/:id', contactController.updateContact);
 
 /**
@@ -120,6 +122,7 @@ contactRouter.put('/update-message/:id', contactController.updateContact);
  *       500:
  *         description: Internal server error
  */
+
 contactRouter.delete('/delete-message/:id', contactController.deleteContact);
 
 export default contactRouter;
