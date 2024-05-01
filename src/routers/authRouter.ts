@@ -4,7 +4,6 @@ import userController from '../modules/user/controller/userController';
 
 const authRouter: Router = express.Router();
 
-
 /**
  * @swagger
  * definitions:
@@ -13,47 +12,73 @@ const authRouter: Router = express.Router();
  *     properties:
  *       firstName:
  *         type: string
+ *         example: John
  *       lastName:
  *         type: string
+ *         example: Doe
  *       userName:
  *         type: string
+ *         example: johndoe
  *       email:
  *         type: string
+ *         example: john.doe@example.com
  *       password:
  *         type: string
+ *         example: mypassword
  */
 
 /**
  * @swagger
- * /api/v1/user/signup:
+ * /user/signup:
  *   post:
- *     summary: Create a new user
- *     description: Create a new user and send a verification email
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: body
- *         description: User object
- *         in: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             firstName:
- *               type: string
- *             lastName:
- *               type: string
- *             userName:
- *               type: string
- *             email:
- *               type: string
- *             password:
- *               type: string
+ *     summary: Signup a new user
+ *     requestBody:
+ *       description: User data
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               firstName:
+ *                 type: string
+ *                 example: John
+ *               lastName:
+ *                 type: string
+ *                 example: Doe
+ *               userName:
+ *                 type: string
+ *                 example: johndoe
+ *               email:
+ *                 type: string
+ *                 example: john.doe@example.com
+ *               password:
+ *                 type: string
+ *                 example: mypassword
  *     responses:
  *       200:
  *         description: Return created user and message
  *         schema:
- *           $ref: '#/definitions/User'
+ *           type: object
+ *           properties:
+ *             newUser:
+ *               $ref: '#/definitions/User'
+ *             message:
+ *               type: string
+ *             token:
+ *               type: string
+ *       400:
+ *         description: Bad request
+ *         schema:
+ *           type: object
+ *           properties:
+ *             message:
+ *               type: string
+ *         examples:
+ *           missingFields:
+ *             value:
+ *               status: "fail"
+ *               message: "Missing required fields: firstName, lastName, userName, email, password"
  */
 
 
@@ -62,7 +87,7 @@ authRouter.post('/signup', userController.createUser);
 
 /**
  * @swagger
- * /api/v1/user/get-users:
+ * /user/get-users:
  *   get:
  *     summary: Get all users
  *     description: Get all users from the database
@@ -81,7 +106,7 @@ authRouter.get('/get-users', userController.getAllUsers);
 
 /**
  * @swagger
- * /api/v1/user/get-user/{id}:
+ * /user/get-user/{id}:
  *   get:
  *     summary: Get user by ID
  *     description: Get user details by ID from the database
@@ -100,16 +125,14 @@ authRouter.get('/get-users', userController.getAllUsers);
  *           $ref: '#/definitions/User'
  */
 
-authRouter.get('/get-user/:id', userController.getUser);
+authRouter.get('/user/get-user/:id', userController.getUser);
 
 /**
  * @swagger
- * /api/v1/user/update-user/{id}:
+ * /user/update-user/{id}:
  *   put:
  *     summary: Update user by ID
  *     description: Update user details by ID in the database
- *     produces:
- *       - application/json
  *     parameters:
  *       - name: id
  *         description: User's ID
@@ -121,7 +144,24 @@ authRouter.get('/get-user/:id', userController.getUser);
  *         in: body
  *         required: true
  *         schema:
- *           $ref: '#/definitions/User'
+ *           type: object
+ *           properties:
+ *             firstName:
+ *               type: string
+ *             lastName:
+ *               type: string
+ *             userName:
+ *               type: string
+ *             email:
+ *               type: string
+ *             role:
+ *               type: string
+ *           example:
+ *             firstName: John
+ *             lastName: Doe
+ *             userName: johndoe
+ *             email: john.doe@example.com
+ *             role: user
  *     responses:
  *       200:
  *         description: Return updated user
@@ -129,11 +169,13 @@ authRouter.get('/get-user/:id', userController.getUser);
  *           $ref: '#/definitions/User'
  */
 
+
+
 authRouter.put('/update-user/:id', userController.updateUser);
 
 /**
  * @swagger
- * /api/v1/user/delete-user/{id}:
+ * /user/delete-user/{id}:
  *   delete:
  *     summary: Delete user by ID
  *     description: Delete user by ID from the database
@@ -157,54 +199,84 @@ authRouter.delete('/delete-user/:id', userController.deleteUser);
 
 /**
  * @swagger
- * /api/v1/user/login:
+ * /user/login:
  *   post:
  *     summary: Login user
  *     description: Login user and return authentication token
- *     produces:
- *       - application/json
- *     parameters:
- *       - name: body
- *         description: User credentials
- *         in: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
- *             password:
- *               type: string
+ *     requestBody:
+ *       description: User credentials
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *           example:
+ *             email: john.doe@example.com
+ *             password: mypassword
  *     responses:
  *       200:
  *         description: Return user details and authentication token
  *         schema:
- *           $ref: '#/definitions/User'
+ *           type: object
+ *           properties:
+ *             _id:
+ *               type: string
+ *             firstName:
+ *               type: string
+ *             lastName:
+ *               type: string
+ *             userName:
+ *               type: string
+ *             email:
+ *               type: string
+ *             role:
+ *               type: string
+ *             token:
+ *               type: string
+ *             message:
+ *               type: string
+ *       401:
+ *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
  */
+
 
 authRouter.post('/login', userController.loginUser);
 
 
 /**
  * @swagger
- * /api/v1/user/admin-login:
+ * /user/admin-login:
  *   post:
  *     summary: Login admin
  *     description: Login admin and return authentication token
  *     produces:
  *       - application/json
- *     parameters:
- *       - name: body
- *         description: Admin credentials
- *         in: body
- *         required: true
- *         schema:
- *           type: object
- *           properties:
- *             email:
- *               type: string
- *             password:
- *               type: string
+ *     requestBody:
+ *       description: Admin credentials
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: ndagijimanapazo64@gmail.com
+ *               password:
+ *                 type: string
+ *                 example: mypassword
  *     responses:
  *       200:
  *         description: Return admin details and authentication token
@@ -244,7 +316,7 @@ authRouter.post('/admin-login', userController.loginAdmin);
 
 /**
  * @swagger
- * /api/user/{id}/verify/{token}:
+ * /user/{id}/verify/{token}:
  *   get:
  *     summary: Verify user
  *     description: Verify user using token

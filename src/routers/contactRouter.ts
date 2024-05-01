@@ -1,5 +1,6 @@
 import express, { Router } from 'express';
 import contactController from '../modules/contact/controller/contactController';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const contactRouter: Router = express.Router();
 
@@ -21,9 +22,21 @@ const contactRouter: Router = express.Router();
 
 /**
  * @swagger
- * /api/v1/contact/send-message:
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: apiKey
+ *       name: authorization
+ *       in: header
+ */
+
+/**
+ * @swagger
+ * /contact/send-message:
  *   post:
  *     summary: Send a message
+ *     security:
+ *       - bearerAuth: []
  *     description: Send a message
  *     parameters:
  *       - name: body
@@ -43,9 +56,11 @@ contactRouter.post('/send-message', contactController.postContact);
 
 /**
  * @swagger
- * /api/v1/contact/get-messages:
+ * /contact/get-messages:
  *   get:
  *     summary: Get all messages
+ *     security:
+ *       - bearerAuth: []
  *     description: Get all messages
  *     responses:
  *       200:
@@ -54,13 +69,15 @@ contactRouter.post('/send-message', contactController.postContact);
  *         description: Internal server error
  */
 
-contactRouter.get('/get-messages', contactController.getAllContacts);
+contactRouter.get('/get-messages',authMiddleware.authenticateToken,authMiddleware.isAdmin, contactController.getAllContacts);
 
 /**
  * @swagger
- * /api/v1/contact/get-message/{id}:
+ * /contact/get-message/{id}:
  *   get:
  *     summary: Get a message by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Get a message by its ID
  *     parameters:
  *       - name: id
@@ -75,13 +92,15 @@ contactRouter.get('/get-messages', contactController.getAllContacts);
  *         description: Internal server error
  */
 
-contactRouter.get('/get-message/:id', contactController.getContact);
+contactRouter.get('/get-message/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin, contactController.getContact);
 
 /**
  * @swagger
- * /api/v1/contact/update-message/{id}:
+ * /contact/update-message/{id}:
  *   put:
  *     summary: Update a message by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Update a message by its ID
  *     parameters:
  *       - name: id
@@ -102,13 +121,15 @@ contactRouter.get('/get-message/:id', contactController.getContact);
  *         description: Internal server error
  */
 
-contactRouter.put('/update-message/:id', contactController.updateContact);
+contactRouter.put('/update-message/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin, contactController.updateContact);
 
 /**
  * @swagger
- * /api/v1/contact/delete-message/{id}:
+ * /contact/delete-message/{id}:
  *   delete:
  *     summary: Delete a message by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Delete a message by its ID
  *     parameters:
  *       - name: id
@@ -123,7 +144,7 @@ contactRouter.put('/update-message/:id', contactController.updateContact);
  *         description: Internal server error
  */
 
-contactRouter.delete('/delete-message/:id', contactController.deleteContact);
+contactRouter.delete('/delete-message/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin, contactController.deleteContact);
 
 export default contactRouter;
 

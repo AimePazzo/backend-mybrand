@@ -18,8 +18,8 @@
     "exclude": [
       "src/database/**/*.*",
       "src/_tests_/**/*.*",
-      "src/modules/project/**/*",
-      "src/modules/comment/**/*",
+      "src/modules/project/*",
+      "src/modules/comment/*",
       "src/middlewares/**/*",
       "src/utils/**/*"
 

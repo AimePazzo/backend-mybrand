@@ -11,32 +11,34 @@ import userRepository from '../modules/user/repository/userRepository';
 }
 
 export const authenticateToken = (req: ExtendedRequest, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.split(' ')[1];
+  const token = req.headers['authorization']?.split(' ')[1];
 
-    if (!token) {
-        return res.status(401).json({ error: 'No token provided' });
-    }
+  if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+  }
 
-    const jwtSecret: Secret | undefined = process.env.JWT_SECRETKEY;
+  const jwtSecret: Secret | undefined = process.env.JWT_SECRETKEY;
 
-    if (!jwtSecret) {
-        return res.status(500).json({ error: 'JWT secret is not defined' });
-    }
+  if (!jwtSecret) {
+      return res.status(500).json({ error: 'JWT secret is not defined' });
+  }
 
-    jwt.verify(token, jwtSecret, async (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Failed to authenticate token' });
-        } else {
-            const userId = (decoded as any).id;
-            const user  =  await userRepository.getUserById(userId);
-            if (!user) {
-                return res.status(401).json({ error: 'User ID not found in token' });
-            }
-            req.user = user;
-            next();
-        }
-    });
+  jwt.verify(token, jwtSecret, async (err, decoded) => {
+      if (err) {
+          return res.status(401).json({ error: 'Failed to authenticate token' });
+      } else {
+          const userId = (decoded as any).id;
+          const user  =  await userRepository.getUserById(userId);
+          if (!user) {
+              return res.status(401).json({ error: 'User ID not found in token' });
+          }
+          req.user = user;
+          next();
+      }
+  });
 };
+
+
 
 const isAdmin = asyncHandler(async (req: ExtendedRequest, res: Response, next: NextFunction) => {
   const { email } = req.user;

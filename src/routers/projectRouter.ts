@@ -7,16 +7,15 @@ const projectRouter: Router = express.Router();
 
 /**
  * @swagger
- * /api/project/post-project:
+ * /project/post-project:
  *   post:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Post a project
  *     description: Post a project
+ *     content:
+ *       - multipart/form-data
  *     parameters:
- *       - name: Authorization
- *         in: header
- *         description: Bearer token
- *         required: true
- *         type: string
  *       - name: title
  *         in: formData
  *         type: string
@@ -41,22 +40,19 @@ const projectRouter: Router = express.Router();
  *         description: Internal server error
  */
 
+
 projectRouter.post('/post-project', authMiddleware.authenticateToken,
     authMiddleware.isAdmin,
     upload.single("image"),projectController.postProject);
 
 /**
  * @swagger
- * /api/project/get-projects:
+ * /project/get-projects:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get all projects
  *     description: Get all projects
- *     parameters:
- *       - name: Authorization
- *         in: header
- *         description: Bearer token
- *         required: true
- *         type: string
  *     responses:
  *       200:
  *         description: Successfully retrieved projects
@@ -64,20 +60,18 @@ projectRouter.post('/post-project', authMiddleware.authenticateToken,
  *         description: Internal server error
  */
 
-projectRouter.get('/get-projects',authMiddleware.authenticateToken, projectController.getAllProjects);
 
+
+projectRouter.get('/get-projects',authMiddleware.authenticateToken, projectController.getAllProjects);
 /**
  * @swagger
- * /api/project/get-project/{id}:
+ * /project/get-project/{id}:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Get a project by ID
  *     description: Get a project by its ID
  *     parameters:
- *       - name: Authorization
- *         in: header
- *         description: Bearer token
- *         required: true
- *         type: string
  *       - name: id
  *         description: Project ID
  *         in: path
@@ -90,42 +84,47 @@ projectRouter.get('/get-projects',authMiddleware.authenticateToken, projectContr
  *         description: Internal server error
  */
 
+
 projectRouter.get('/get-project/:id',authMiddleware.authenticateToken, projectController.getProject);
+
 
 /**
  * @swagger
- * /api/project/update-project/{id}:
+ * /project/update-project/{id}:
  *   put:
  *     summary: Update a project by ID
  *     description: Update a project by its ID
- *     consumes:
- *       - multipart/form-data
- *     parameters:
- *       - name: Authorization
- *         in: header
- *         description: Bearer token
- *         required: true
- *         type: string
- *       - name: id
- *         description: Project ID
- *         in: path
- *         required: true
- *         type: string
- *       - name: title
- *         in: formData
- *         type: string
- *         required: true
- *       - name: description
- *         in: formData
- *         type: string
- *         required: true
- *       - name: field
- *         in: formData
- *         type: string
- *         required: true
- *       - name: image
- *         in: formData
- *         type: file
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: Project ID
+ *                 in: path
+ *                 required: true
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Project image
+ *                 in: formData
+ *               title:
+ *                 type: string
+ *                 description: Project title
+ *                 in: formData
+ *               description:
+ *                 type: string
+ *                 description: Project description
+ *                 in: formData
+ *               field:
+ *                 type: string
+ *                 description: Project field
+ *                 in: formData
  *     responses:
  *       200:
  *         description: Successfully updated the project
@@ -135,20 +134,17 @@ projectRouter.get('/get-project/:id',authMiddleware.authenticateToken, projectCo
  *         description: Internal server error
  */
 
-projectRouter.put('/update-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin,upload.single("image"), projectController.updateProject);
+projectRouter.put('/update-project',authMiddleware.authenticateToken,authMiddleware.isAdmin,projectController.updateProject);
 
 /**
  * @swagger
- * /api/project/delete-project/{id}:
+ * /project/delete-project/{id}:
  *   delete:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Delete a project by ID
  *     description: Delete a project by its ID
  *     parameters:
- *       - name: Authorization
- *         in: header
- *         description: Bearer token
- *         required: true
- *         type: string
  *       - name: id
  *         description: Project ID
  *         in: path
@@ -160,6 +156,7 @@ projectRouter.put('/update-project/:id',authMiddleware.authenticateToken,authMid
  *       500:
  *         description: Internal server error
  */
+
 
 projectRouter.delete('/delete-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin, projectController.deleteProject);
 

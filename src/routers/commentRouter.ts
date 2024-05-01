@@ -4,14 +4,17 @@ import authMiddleware from "../middlewares/authMiddleware";
 
 const commentRouter = Router();
 
+
 /**
  * @swagger
  * tags:
  *   name: Comment
  *   description: Comment routes
- * /api/v1/comments/post-comment/{id}:
+ * /comments/post-comment/{id}:
  *   post:
  *     summary: Post a comment
+ *     security:
+ *       - bearerAuth: []
  *     description: Post a comment on a specific post
  *     parameters:
  *       - name: id
@@ -34,13 +37,16 @@ const commentRouter = Router();
  *       500:
  *         description: Internal server error
  */
+
 commentRouter.post("/post-comment/:id", authMiddleware.authenticateToken, commentControllers.postComment)
 
 /**
  * @swagger
- * /api/v1/comments/get-comments:
+ * /comments/get-comments:
  *   get:
  *     summary: Get all comments
+ *     security:
+ *       - bearerAuth: []
  *     description: Get all comments
  *     responses:
  *       200:
@@ -52,9 +58,11 @@ commentRouter.get("/get-comments", authMiddleware.authenticateToken, commentCont
 
 /**
  * @swagger
- * /api/v1/comments/get-comment/{id}:
+ * /comments/get-comment/{id}:
  *   get:
  *     summary: Get a comment by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Get a comment by its ID
  *     parameters:
  *       - name: id
@@ -73,9 +81,11 @@ commentRouter.get("/get-comment/:id", authMiddleware.authenticateToken, commentC
 
 /**
  * @swagger
- * /api/v1/comment/update-comment/{id}:
+ * /comment/update-comment/{id}:
  *   put:
  *     summary: Update comment status by ID
+ *     security:
+ *       - bearerAuth: []
  *     description: Updates the status of a comment based on the provided comment ID.
  *     parameters:
  *       - name: id

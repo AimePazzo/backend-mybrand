@@ -4,7 +4,13 @@ import tokenModel from "../../../database/model/token";
 import crypto from 'crypto'
 
 const createUser = async (body: any) => {
-    return await UserModel.create(body);
+    return await UserModel.create({
+        firstName: body.firstName,
+        lastName: body.lastName,
+        userName:body.userName,
+        email:body.email,
+        password:body.password
+    });
 }
 
 const createToken = async (body: any) => {

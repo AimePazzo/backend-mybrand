@@ -15,11 +15,17 @@ const asyncHandler = require('express-async-handler')
 const createUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     // TODO: Get the email address from req.body
     const email: string = req.body.email;
-    console.log(email);
     // TODO: Find the email address if it exists
     const findUser = await userRepository.findUser(email);
     if (!findUser) { 
-        const newUser = await userRepository.createUser(req.body);
+        const userData = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            userName:req.body.userName,
+            email:req.body.email,
+            password:req.body.password
+        }
+        const newUser = await userRepository.createUser(userData);
         const token = await userRepository.createToken(newUser._id);
         const url = `${process.env.BASE_URL_ONLINE}user/${newUser._id}/verify/${token.token}`;
         await emailController.verifyEmail(newUser.email,"Verify Email", url);

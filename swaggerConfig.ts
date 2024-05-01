@@ -1,5 +1,5 @@
-import swaggerjsdoc from 'swagger-jsdoc'
-import swagger from 'swagger-ui-express'
+import swaggerJsdoc from 'swagger-jsdoc'
+import swaggerUi from 'swagger-ui-express'
 
 const options = {
     definition: {
@@ -15,18 +15,33 @@ const options = {
         },
         servers: [
             {
-                url: 'https://backend-mybrand-xea6.onrender.com',
+                url: 'https://backend-mybrand-xea6.onrender.com/api/v1/'
+            },
+            {
+                url: 'http://localhost:5000/api/v1/'
             },
         ],
+        components: {
+            securitySchemes: {
+                bearerAuth: {
+                    type: 'apiKey',
+                    name: 'Authorization',
+                    scheme: 'bearer',
+                    in: 'header',
+                    value: 'Bearer YOUR_TOKEN_HERE',
+                    description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer {token}"',
+                },
+            },
+        },
     },
     apis: ['./src/routers/*.ts'],
 }
 
-const spacs = swaggerjsdoc(options)
+const specs = swaggerJsdoc(options)
 const swaggerSetup = (app: any) => {
     app.use('/api-docs',
-        swagger.serve,
-        swagger.setup(spacs)
+        swaggerUi.serve,
+        swaggerUi.setup(specs)
     )
 }
 
