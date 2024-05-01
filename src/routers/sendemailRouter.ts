@@ -4,7 +4,7 @@ import emailController from "../modules/email/controller/emailController";
 const sendEmailRouter : Router = express.Router();
 /**
  * @swagger
- * /api/v1/email/send-email:
+ * /email/send-email:
  *   post:
  *     summary: Send email
  *     description: Send an email to the specified recipient
@@ -34,7 +34,7 @@ sendEmailRouter.post('/send-email', emailController.sendEmail);
 
 /**
  * @swagger
- * /api/v1/email/email-user:
+ * /email/email-user:
  *   post:
  *     summary: Send email to user
  *     description: Send an email to a user
