@@ -45,8 +45,8 @@ const getUserById = async (id: string) => {
 const updateUser = async (body: any) => {
     return await UserModel.findByIdAndUpdate(body.id,
         {
-            firstname: body.firstname,
-            lastname: body.lastname,
+            firstName: body.firstName,
+            lastName: body.lastName,
             email: body.email,
             username: body.username,
         },

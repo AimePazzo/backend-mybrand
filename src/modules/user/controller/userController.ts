@@ -90,8 +90,8 @@ const updateUser = asyncHandler(async (req: Request, res: Response): Promise<voi
     try {
         const userData = {
             id: req.params.id,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
             email: req.body.email,
             username: req.body.username,
         }
@@ -154,31 +154,41 @@ const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void
 });
 
 
-// Login a admin
-
+// Login as admin
 const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    const email: string = req.body.email;
-    const password: string = req.body.password;
-    const findAdmin = await userRepository.loginUser(email);
-    if (!findAdmin || findAdmin.role !== "admin") {
-         res.status(401).json({ message: "Not Authorized" });
-    }
-    if (await findAdmin?.isPasswordMatched(password)) {
-        const token = generateToken(findAdmin?._id);
-        res.status(200).json({
-            _id: findAdmin?._id,
-            firstName: findAdmin?.firstName,
-            lastName: findAdmin?.lastName,
-            email: findAdmin?.email,
-            username: findAdmin?.userName,
-            token: token,
-            message: "Login successful"
-        });
-    } else {
-        res.status(401).json({
-            message: "Invalid credentials"
+    try {
+        const email: string = req.body.email;
+        const password: string = req.body.password;
+        const findAdmin = await userRepository.loginUser(email);
+        
+        if (!findAdmin || findAdmin.role !== "admin") {
+            res.status(401).json({ message: "Not Authorized" });
+            return;
+        }
+
+        if (await findAdmin?.isPasswordMatched(password)) {
+            const token = generateToken(findAdmin?._id);
+            res.status(200).json({
+                _id: findAdmin?._id,
+                firstName: findAdmin?.firstName,
+                lastName: findAdmin?.lastName,
+                email: findAdmin?.email,
+                username: findAdmin?.userName,
+                token: token,
+                message: "Login successful"
+            });
+        } else {
+            res.status(401).json({
+                message: "Invalid credentials"
+            });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Internal server error"
         });
     }
 });
+
 
 export default {createUser,getAllUsers,updateUser,deleteUser,loginUser,getUser,loginAdmin,verifyUser}
