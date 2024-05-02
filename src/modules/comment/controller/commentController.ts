@@ -40,7 +40,7 @@ const getCommentById = async (req: Request, res: Response) => {
 
 const updateCommentById = async (req: Request, res: Response) => {
   try {
-    const id = req.params.id;
+    const id:string = req.params.id;
     const status = req.body.status;
     const data = await commentRepository.updateCommentById(id, status);
     console.log(data);
