@@ -5,9 +5,7 @@ import userRepository from "../../user/repository/userRepository";
 import emailController from "../../email/controller/emailController";
 import uploadImages from "./uploadController";
 import commentRepository from "../../comment/repository/commentRepository";
-
-
-const asyncHandler = require('express-async-handler')
+import asyncHandler from 'express-async-handler';
 
 // Create a new Contact object
 
@@ -20,7 +18,6 @@ const postProject = asyncHandler(async (req: Request, res: Response): Promise<vo
             })
         }
         const result = await uploadImages(req.file);
-        console.log(result)
         const projectData = {
             title: req.body.title,
             description: req.body.description,
@@ -30,7 +27,7 @@ const postProject = asyncHandler(async (req: Request, res: Response): Promise<vo
             }],
             field: req.body.field
         }
-        console.log(projectData)
+        
         // TODO: Find the email address if it exists
         const project = await projectRepository.postProject(projectData);
         res.status(200).json({ projectDetail: project, message: 'Project Created successful!' });

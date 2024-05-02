@@ -1,6 +1,7 @@
 import chaiHttp from "chai-http";
 import chai, { expect } from "chai";
 import app from "../../../../server";
+import { fileURLToPath } from "url";
 
 
 chai.use(chaiHttp);
@@ -21,6 +22,7 @@ describe("User Test Cases", () => {
           email: "testuser@gmail.com",
           password: "PasswordForUser",
         })
+        
         .end((error, response) => {
             expect(200);
           expect(response.body).to.be.a("object");

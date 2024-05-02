@@ -22,7 +22,7 @@ const deleteManyComments = async (id: string) => {
 }
 
 const updateCommentById = async (id: string, body: any) => {
-    return await Comment.findByIdAndUpdate(id,
+    return await Comment.findOneAndUpdate(id,
         { status: body },
         { new: true });
 }

@@ -4,15 +4,33 @@ import app from "../../../../server";
 
 chai.use(chaiHttp);
 
+let token: string;
+const loginUser = async (done: Function) => {
+  const res = await chai.request(app)
+    .post('/api/v1/user/login')
+    .send({ email: "ndagijimanapazo64@gmail.com", password: "Admin@123" })
+    .end((error, res) => {
+      token = res.body.token;
+      done(error, token);
+    })
+}
+
 describe('Contact Routes', () => {
   // Assuming you have mocked data or a test database
   let mockContactId = 'mock-contact-id';
+
+  before((done) => {
+    loginUser((err: any, token: string) => {
+      token = token
+      done();
+    })
+  })
 
   describe('POST /api/contact/send-message', () => {
     it('should create a new message', async () => {
       const res = await chai.request(app)
         .post('/api/v1/contact/send-message')
-        .send({ 
+        .send({
           userName: 'John Doe',
           email: 'john.doe@example.com',
           subject: 'Test Subject',
@@ -22,7 +40,6 @@ describe('Contact Routes', () => {
       expect(res).to.have.status(200);
       expect(res.body.message).to.equal('Message sent');
       expect(res.body.ContactDetail).to.be.an('object');
-
       expect(res.body.ContactDetail.userName).to.equal('John Doe');
       expect(res.body.ContactDetail.email).to.equal('john.doe@example.com');
       expect(res.body.ContactDetail.subject).to.equal('Test Subject');
@@ -33,16 +50,21 @@ describe('Contact Routes', () => {
 
   describe('GET /api/v1/contact/get-messages', () => {
     it('should get all messages', async () => {
-      const res = await chai.request(app).get('/api/v1/contact/get-messages');
+      const res = await (((await chai.request(app)
+        .get('/api/v1/contact/get-messages')
+        .set('authorization', 'Bearer ' + token)
+      )))
 
       expect(res).to.have.status(200);
-    //   expect(res.body).to.be.an('array');
+      //   expect(res.body).to.be.an('array');
     });
   });
 
   describe('GET /api/v1/contact/get-message/:id', () => {
     it('should get a message by ID', async () => {
-      const res = await chai.request(app).get(`/api/v1/contact/get-message/${mockContactId}`);
+      const res = await chai.request(app).get(`/api/v1/contact/get-message/${mockContactId}`)
+        .set('authorization', 'Bearer ' + token)
+
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.an('object');
@@ -53,7 +75,9 @@ describe('Contact Routes', () => {
     it('should update a message by ID', async () => {
       const res = await chai.request(app)
         .put(`/api/v1/contact/update-message/${mockContactId}`)
-        .send({ 
+        .set('authorization', 'Bearer ' + token)
+
+        .send({
           userName: 'Updated Name',
           email: 'updated.email@example.com',
           subject: 'Updated Subject',
@@ -71,7 +95,9 @@ describe('Contact Routes', () => {
 
   describe('DELETE /api/v1/contact/delete-message/:id', () => {
     it('should delete a message by ID', async () => {
-      const res = await chai.request(app).delete(`/api/v1/contact/delete-message/${mockContactId}`);
+      const res = await chai.request(app).delete(`/api/v1/contact/delete-message/${mockContactId}`)
+        .set('authorization', 'Bearer ' + token)
+
 
       expect(res).to.have.status(200);
       expect(res.body).to.be.a("object")
