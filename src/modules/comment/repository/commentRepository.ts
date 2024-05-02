@@ -21,10 +21,13 @@ const deleteManyComments = async (id: string) => {
     return await Comment.deleteMany({ project: id });
 }
 
-const updateCommentById = async (id: string, body: any) => {
-    return await Comment.findOneAndUpdate(id,
-        { status: body },
-        { new: true });
+const updateCommentById = async (id: string, status: any) => {
+    return await Comment.findOneAndUpdate(
+        { project: id },
+        { status: status }, // Update the status with the value from the request body
+        { new: true }
+    );
 }
+
 
 export default { postComment, getComments, getCommentById, deleteManyComments, updateCommentById};
