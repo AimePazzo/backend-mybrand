@@ -13,24 +13,30 @@ const projectRouter: Router = express.Router();
  *       - bearerAuth: []
  *     summary: Post a project
  *     description: Post a project
- *     content:
- *       - multipart/form-data
- *     parameters:
- *       - name: title
- *         in: formData
- *         type: string
- *         required: true
- *       - name: description
- *         in: formData
- *         type: string
- *         required: true
- *       - name: field
- *         in: formData
- *         type: string
- *         required: true
- *       - name: image
- *         in: formData
- *         type: file
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Project image
+ *                 in: formData
+ *               title:
+ *                 type: string
+ *                 description: Project title
+ *                 in: formData
+ *               description:
+ *                 type: string
+ *                 description: Project description
+ *                 in: formData
+ *               field:
+ *                 type: string
+ *                 description: Project field
+ *                 in: formData
  *     responses:
  *       200:
  *         description: Successfully posted the project
