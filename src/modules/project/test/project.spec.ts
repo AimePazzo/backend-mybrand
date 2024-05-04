@@ -13,7 +13,7 @@ let token: string;
 const loginUser = (done:Function) =>{
     router()
    .post('/api/v1/user/login')
-   .send({email:"ndagijimanapazo64@gmail.com", password:"Admin@123"})
+   .send({email:process.env.ADMIN, password:process.env.PASSWORD})
    .end((error,res)=>{
     token = res.body.token;
     done(error,token);
