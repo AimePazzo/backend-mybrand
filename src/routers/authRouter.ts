@@ -276,7 +276,7 @@ authRouter.post('/login', userController.loginUser);
  *                 example: ndagijimanapazo64@gmail.com
  *               password:
  *                 type: string
- *                 example: mypassword
+ *                 example: Admin@123
  *     responses:
  *       200:
  *         description: Return admin details and authentication token

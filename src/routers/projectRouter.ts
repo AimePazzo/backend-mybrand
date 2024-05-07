@@ -140,7 +140,7 @@ projectRouter.get('/get-project/:id',authMiddleware.authenticateToken, projectCo
  *         description: Internal server error
  */
 
-projectRouter.put('/update-project',authMiddleware.authenticateToken,authMiddleware.isAdmin,projectController.updateProject);
+projectRouter.put('/update-project/:id',authMiddleware.authenticateToken,authMiddleware.isAdmin,upload.single("image"),projectController.updateProject);
 
 /**
  * @swagger

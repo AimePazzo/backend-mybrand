@@ -28,11 +28,10 @@ const options = {
                     name: 'Authorization',
                     scheme: 'bearer',
                     in: 'header',
-                    value: 'Bearer YOUR_TOKEN_HERE',
                     description: 'JWT Authorization header using the Bearer scheme. Example: "Bearer {token}"',
                 },
             },
-        },
+        }
     },
     apis: ['./src/routers/*.ts'],
 }
