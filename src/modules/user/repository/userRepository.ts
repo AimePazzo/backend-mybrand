@@ -30,7 +30,6 @@ const findUser = async (body: any) => {
 }
 
 const verifyUser = async (id: string, token: string) => {
-    console.log(id, token);
     return await tokenModel.findOne({ userID: id, token: token });
 }
 

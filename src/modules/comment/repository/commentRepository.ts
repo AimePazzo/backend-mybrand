@@ -21,6 +21,10 @@ const deleteManyComments = async (id: string) => {
     return await Comment.deleteMany({ project: id });
 }
 
+const deleteCommentById = async (id: string) => {
+    return await Comment.findByIdAndDelete(id);
+}
+
 const updateCommentById = async (id: string, status: any) => {
     return await Comment.findOneAndUpdate(
         { project: id },
@@ -30,4 +34,4 @@ const updateCommentById = async (id: string, status: any) => {
 }
 
 
-export default { postComment, getComments, getCommentById, deleteManyComments, updateCommentById};
+export default { postComment, getComments, getCommentById, deleteManyComments, updateCommentById, deleteCommentById};

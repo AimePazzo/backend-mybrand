@@ -18,12 +18,9 @@ const postComment = async (req: ExtendedRequest, res: Response) => {
 };
 
 const getComments = async (req: Request, res: Response) => {
-  try {
+  
     const data = await commentRepository.getComments();
     return res.status(200).json({ status: 200, message: "Success", data });
-  } catch (error) {
-    return res.status(500).json({ status: 500, error: JSON.stringify(error) });
-  }
 };
 
 // TODO: get comment by id
@@ -43,11 +40,30 @@ const updateCommentById = async (req: Request, res: Response) => {
     const id:string = req.params.id;
     const status = req.body.status;
     const data = await commentRepository.updateCommentById(id, status);
-    console.log(data);
     return res.status(200).json({ status: 200, message: "Comment status updated successfully", data });
   } catch (error) {
     return res.status(500).json({ status: 500, error: JSON.stringify(error) });
   }
 }
 
-export default { postComment, getComments, getCommentById,updateCommentById};
+const deleteCommentById = async (req: Request, res: Response) => {
+  try {
+    const id:string = req.params.id;
+    const data = await commentRepository.deleteCommentById(id);
+    return res.status(200).json({ status: 200, message: "Comment deleted successfully", data });
+  } catch (error) {
+    return res.status(500).json({ status: 500, error: JSON.stringify(error) });
+  }
+}
+
+const deleteCommentByProjectId = async(req:Request, res:Response) => {
+  try {
+    const id:string = req.params.id;
+    const data = await commentRepository.deleteManyComments(id);
+    return res.status(200).json({ status: 200, message: "Comment deleted successfully", data });
+  } catch (error) {
+    return res.status(500).json({ status: 500, error: JSON.stringify(error) });
+  }
+}
+
+export default { postComment, getComments, getCommentById,updateCommentById,deleteCommentById,deleteCommentByProjectId};

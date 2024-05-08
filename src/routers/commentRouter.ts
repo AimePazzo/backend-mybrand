@@ -126,3 +126,7 @@ commentRouter.get("/get-comment/:id", authMiddleware.authenticateToken, commentC
 
 commentRouter.put("/update-comment/:id", authMiddleware.authenticateToken, authMiddleware.isAdmin, commentControllers.updateCommentById);
 export default commentRouter;
+
+
+commentRouter.delete("/delete-comment/:id", authMiddleware.authenticateToken, authMiddleware.isAdmin,commentControllers.deleteCommentById)
+commentRouter.delete("/delete-project-comment/:id", authMiddleware.authenticateToken, authMiddleware.isAdmin,commentControllers.deleteCommentByProjectId)

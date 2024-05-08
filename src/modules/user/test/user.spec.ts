@@ -1,7 +1,7 @@
 import chaiHttp from "chai-http";
 import chai, { expect } from "chai";
 import app from "../../../../server";
-import { fileURLToPath } from "url";
+
 
 
 chai.use(chaiHttp);
@@ -38,6 +38,52 @@ describe("User Test Cases", () => {
           done(error);
         });
     });
+
+    it('should return a message to verify email if user is not verified', (done) => {
+      router()
+        .post('/api/v1/user/login')
+        .send({
+          email: 'testuser@gmail.com',
+          password: 'PasswordForUser',
+        })
+        .end((err, res) => {
+          expect(400)
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.have.property('message');
+          expect(res.body.message).to.equal("An Email sent to your account please verify")
+          done(err);
+        });
+    });
+
+    it('should be able to verify email',(done)=>{
+      router()
+       .get(`/api/v1/user/${userId}/verify/${token}`)
+       .end((error, response) => {
+          expect(response.body).to.be.a("object");
+          expect(response.statusCode).to.equal(200);
+          done(error);
+        });
+    })
+
+    it('should return Invalid Token',(done)=>{
+      router()
+       .get(`/api/v1/user/${userId}/verify/gfdsfcgvhbjnmkjkhgftdrdyuiouytredfgvbhn`)
+       .end((error, response) => {
+          expect(response.body).to.be.a("object");
+          expect(response.statusCode).to.equal(400);
+          done(error);
+        });
+    })
+
+    it('should return User not fund',(done)=>{
+      router()
+       .get(`/api/v1/user/663a6627a763f87c67ae3081/verify/${token}`)
+       .end((error, response) => {
+          expect(response.body).to.be.a("object");
+          expect(response.statusCode).to.equal(400);
+          done(error);
+        });
+    })
        
     it("Should not add same user twice", (done) => {
       router()
@@ -58,6 +104,35 @@ describe("User Test Cases", () => {
         });
     });
 
+    it('should be able to get all users', (done) => {
+      router()
+       .get("/api/v1/user/get-users")
+       .end((error, response) => {
+          expect(response.body).to.be.a("array");
+          expect(response.statusCode).to.equal(200);
+          done(error);
+        });
+    })
+
+    it('should be able to get one user ',(done)=>{
+      router()
+       .get(`/api/v1/user/get-user/${userId}`)
+       .end((error, response) => {
+        expect(response.body).to.be.a("object");
+        expect(response.statusCode).to.equal(200);
+        done(error);
+       })
+    })
+
+    it('should return user not found in get user ',(done)=>{
+      router()
+       .get(`/api/v1/user/get-user/663a6627a763f87c67ae308178`)
+       .end((error, response) => {
+        expect(response.body).to.be.a("object");
+        expect(response.statusCode).to.equal(400);
+        done(error);
+       })
+    })
     it('should return a token on successful login', (done) => {
         router()
           .post('/api/v1/user/login')
@@ -66,32 +141,74 @@ describe("User Test Cases", () => {
             password: 'PasswordForUser',
           })
           .end((err, res) => {
-            if (err) return done(err);
             expect(200)
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.property('message');
-            done();
+            done(err);
           });
       });
-    
-      it('should return a message to verify email if user is not verified', (done) => {
+      it('should return Invalid credentials', (done) => {
         router()
           .post('/api/v1/user/login')
           .send({
-            email: 'unverifieduser@gmail.com',
-            password: 'PasswordForUser',
+            email: 'testuser@gmail.com',
+            password: 'wrongpassword',
           })
-         
           .end((err, res) => {
-            if (err) return done(err);
-            expect(400)
+            expect(401)
             expect(res.body).to.be.an('object');
-            expect(res.body).to.have.property('message');
-            expect(res.body.message).to.equal("An Email sent to your account please verify")
-            done();
+            expect(res.body.message).equal('Invalid credentials');
+            done(err);
           });
       });
+      
     
+      it("should be able login as admin",(done)=>{
+        router()
+         .post('/api/v1/user/admin-login')
+         .send({
+          email: process.env.ADMIN,
+          password: process.env.PASSWORD,
+          })
+         .end((err, res) => {
+            
+            expect(200)
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message','Login successful');
+            done(err);
+          });
+      })
+
+      it("should return Not authorized",(done)=>{
+        router()
+         .post('/api/v1/user/admin-login')
+         .send({
+            email:'admin@example.com',
+          password: 'wrongpassword',
+          })
+         .end((err, res) => {
+            expect(401)
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message','Not Authorized');
+            done(err);
+          });
+      })
+
+      it("should return invalid credentials",(done)=>{
+        router()
+         .post('/api/v1/user/admin-login')
+         .send({
+            email:process.env.ADMIN,
+          password: 'wrongpassword',
+          })
+         .end((err, res) => {
+            
+            expect(401)
+            expect(res.body).to.be.an('object');
+            expect(res.body).to.have.property('message','Invalid credentials');
+            done(err);
+          });
+      })
+     
       
 
     it("Should be able to update registered user", (done) => {
@@ -109,15 +226,35 @@ describe("User Test Cases", () => {
         });
     });
 
-    it("Should be able to delete registered user", (done) => {
+    it("Should return User update error", (done) => {
       router()
-        .delete(`/api/v1/user/delete-user/${userId}`)
+        .put(`/api/v1/user/update-user/jnjnviebvpiqeb`)
         .send({
+          name: "TestingUser-Updated",
           email: "testuser@gmail.com",
         })
         .end((error, response) => {
+            expect(400)
+          expect(response.body).to.be.a("object");
+          done(error);
+        });
+    });
+
+    it("Should be able to delete registered user", (done) => {
+      router()
+        .delete(`/api/v1/user/delete-user/${userId}`)
+        .end((error, response) => {
           expect(response.body).to.be.a("object");
             expect(response.body).to.have.property("message","User deleted successfully");
+          done(error);
+        });
+    });
+    it("Should return user not found in delete", (done) => {
+      router()
+        .delete(`/api/v1/user/delete-user/663a68464c04014799cf3150`)
+        .end((error, response) => {
+          expect(response.body).to.be.a("object");
+            expect(response.body).to.have.property("message","User not found");
           done(error);
         });
     });

@@ -28,13 +28,7 @@ const sendEmail = async (req: Request, res: Response) => {
     };
 
     transporter.sendMail(mailOptionsGmail, (error, info) => {
-        if (error) {
-            console.log(error);
-            res.status(500).json({
-                message: "Email could not be sent"
-            });
-        } else {
-            console.log("Email sent: " + info.response);
+      if (info) {
             res.status(200).json({
                 message: "Email sent successfully"
             });
@@ -55,13 +49,7 @@ const sendEmailToUser = async (req: Request, res: Response) => {
     };
 
     transporter.sendMail(mailOptionsGmail, (error, info) => {
-        if (error) {
-            console.log(error);
-            res.status(500).json({
-                message: "Email could not be sent"
-            });
-        } else {
-            console.log("Email sent: " + info.response);
+        if (info) {
             res.status(200).json({
                 message: "Email sent successfully"
             });
@@ -77,13 +65,7 @@ const verifyEmail = (email: string, subject: string, message: string) => {
         text: message
     };
 
-    transporter.sendMail(mailOptionsVerify, (error, info) => {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log("Email sent: " + info.response);
-        }
-    });
+    transporter.sendMail(mailOptionsVerify);
 };
 
 export default { sendEmail, verifyEmail, sendEmailToUser };

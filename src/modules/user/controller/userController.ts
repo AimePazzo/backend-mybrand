@@ -29,7 +29,7 @@ const createUser = asyncHandler(async (req: Request, res: Response): Promise<voi
         const token = await userRepository.createToken(newUser._id);
         const url = `${process.env.BASE_URL_ONLINE}user/${newUser._id}/verify/${token.token}`;
         await emailController.verifyEmail(newUser.email,"Verify Email", url);
-        res.status(200).json({ newUser: newUser, message: 'An Email sent to your account please verify',token:token.token });
+        res.status(200).json({ newUser: newUser, message: 'An Email sent to your account please verify',token:token });
     } else {
         res.status(400).json({
             message: "User already exists"
@@ -46,12 +46,11 @@ const verifyUser = asyncHandler(async (req: Request, res: Response): Promise<voi
     const user = await userRepository.findUserById(id);
     if (user) {
         const verifyUser = await userRepository.verifyUser(id, token);
-        console.log(verifyUser)
         if (verifyUser) {
             await userRepository.UpdateUserVerified(id);
             await userRepository.tokenRemove()
-            res.redirect("/verify.html");
-        res.status(200).json({ message: "Email verified successfully" });
+            res.status(200).redirect("/verify.html");
+            return
         } else {
         res.status(400).json({ message: 'Invalid Token' });
         }
@@ -73,13 +72,15 @@ const getAllUsers = asyncHandler(async (req: Request, res: Response): Promise<vo
 // Get a single user
 
 const getUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+    try {
     const id: string = req.params.id;
     validateMongoDbId(id)
-    try {
         const user = await userRepository.getUserById(id)
         res.status(200).json(user);
     } catch (error) {
-        throw new Error(String(error))
+        res.status(400).json({
+            message: "User not found",
+        })
     }
 
 });
@@ -98,7 +99,10 @@ const updateUser = asyncHandler(async (req: Request, res: Response): Promise<voi
         const updateUser = await userRepository.updateUser(userData);
         res.status(200).json({ updateUser: updateUser });
     } catch (error) {
-        throw new Error('user update error')
+        res.status(400).json({
+            message: "User update error"
+        })
+ 
     }
 });
 
@@ -122,41 +126,36 @@ const deleteUser = asyncHandler(async (req: Request, res: Response): Promise<voi
 const loginUser = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     const email: string = req.body.email;
     const password: string = req.body.password;
-
     const user = await userRepository.loginUser(email);
-    if (user && (await user?.isPasswordMatched(password)) && user.verified) {
-        const token = generateToken(user?._id);
-        res.status(200).json({
-            _id: user._id,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email,
-            username: user.userName, 
-            token: token
-        });
-    } 
-    else 
-    if(!user?.verified){
-            let token = await userRepository.getToken(user?._id)
-            if(!token){
-                token = await userRepository.createToken(user?._id)
-                console.log(token)
-                const url = `${process.env.BASE_URL_ONLINE}user/${user?._id}/verify/${token.token}`;
-                await emailController.verifyEmail(email,"Verify Email", url);
+    if (user && (await user.isPasswordMatched(password))) {
+        if (user.verified) {
+            const token = generateToken(user._id);
+            res.status(200).json({
+                _id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                username: user.userName, 
+                token: token
+            });
+        } else {
+            let token = await userRepository.getToken(user._id);
+            if (!token) {
+                token = await userRepository.createToken(user._id);
+                const url = `${process.env.BASE_URL_ONLINE}user/${user._id}/verify/${token.token}`;
+                await emailController.verifyEmail(email, "Verify Email", url);
             }
             res.status(400).json({ message: 'An Email sent to your account please verify' });
-    }
-    else {
-        res.status(401).json({
-            message: "Invalid credentials"
-        });
+        }
+    } else {
+        res.status(401).json({ message: "Invalid credentials" });
     }
 });
 
 
+
 // Login as admin
 const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    try {
         const email: string = req.body.email;
         const password: string = req.body.password;
         const findAdmin = await userRepository.loginUser(email);
@@ -167,13 +166,13 @@ const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<voi
         }
 
         if (await findAdmin?.isPasswordMatched(password)) {
-            const token = generateToken(findAdmin?._id);
+            const token = generateToken(findAdmin._id);
             res.status(200).json({
-                _id: findAdmin?._id,
-                firstName: findAdmin?.firstName,
-                lastName: findAdmin?.lastName,
-                email: findAdmin?.email,
-                username: findAdmin?.userName,
+                _id: findAdmin._id,
+                firstName: findAdmin.firstName,
+                lastName: findAdmin.lastName,
+                email: findAdmin.email,
+                username: findAdmin.userName,
                 token: token,
                 message: "Login successful"
             });
@@ -182,12 +181,6 @@ const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<voi
                 message: "Invalid credentials"
             });
         }
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal server error"
-        });
-    }
 });
 
 

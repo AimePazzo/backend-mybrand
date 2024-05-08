@@ -48,6 +48,15 @@ describe('Contact Routes', () => {
     });
   });
 
+  describe('POST /api/contact/send-message', () => {
+    it('should return internal server error', async () => {
+      const res = await chai.request(app)
+        .post('/api/v1/contact/send-message')
+        .send({});
+      expect(res).to.have.status(500);
+    });
+  });
+
   describe('GET /api/v1/contact/get-messages', () => {
     it('should get all messages', async () => {
       const res = await (((await chai.request(app)
@@ -71,6 +80,17 @@ describe('Contact Routes', () => {
     });
   });
 
+  describe('GET /api/v1/contact/get-message/:id', () => {
+    it('should return error when id is wrong', async () => {
+      const res = await chai.request(app).get(`/api/v1/contact/get-message/jbbeuvbiuerviywer7890`)
+        .set('authorization', 'Bearer ' + token)
+
+      expect(res).to.have.status(500);
+      expect(res.body).to.be.an('object');
+    });
+  });
+
+
   describe('PUT /api/v1/contact/update-message/:id', () => {
     it('should update a message by ID', async () => {
       const res = await chai.request(app)
@@ -93,6 +113,22 @@ describe('Contact Routes', () => {
     });
   });
 
+  describe('PUT /api/v1/contact/update-message/:id', () => {
+    it('should return error in update with wrong ID', async () => {
+      const res = await chai.request(app)
+        .put(`/api/v1/contact/update-message/jjjerfwer6789iherir`)
+        .set('authorization', 'Bearer ' + token)
+        .send({
+          userName: 'Updated Name',
+          email: 'updated.email@example.com',
+          subject: 'Updated Subject',
+          message: 'Updated Message'
+        });
+
+      expect(res).to.have.status(500);
+    });
+  });
+
   describe('DELETE /api/v1/contact/delete-message/:id', () => {
     it('should delete a message by ID', async () => {
       const res = await chai.request(app).delete(`/api/v1/contact/delete-message/${mockContactId}`)
@@ -103,6 +139,15 @@ describe('Contact Routes', () => {
       expect(res.body).to.be.a("object")
       expect(res.body).to.have.property("message")
       expect(res.body.message).to.equal('Message deleted successfully');
+    });
+  });
+
+  describe('DELETE /api/v1/contact/delete-message/:id', () => {
+    it('should return error a message because of wrong ID', async () => {
+      const res = await chai.request(app).delete(`/api/v1/contact/delete-message/jhrjferfjerf9803q4jfe`)
+        .set('authorization', 'Bearer ' + token)
+      expect(res).to.have.status(500);
+      
     });
   });
 });

@@ -7,7 +7,6 @@ import asyncHandler from 'express-async-handler';
 // Create a new project
 const postProject = asyncHandler(async (req: Request, res: Response): Promise<void> => {
     try {
-        
         if (!req.file) {
             res.status(400).json({
                 message: "Please upload an image"
@@ -27,7 +26,6 @@ const postProject = asyncHandler(async (req: Request, res: Response): Promise<vo
         const project = await projectRepository.postProject(projectData);
         res.status(200).json({ projectDetail: project, message: 'Project Created successfully!' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({
             message: "Internal server error"
         });
@@ -36,15 +34,8 @@ const postProject = asyncHandler(async (req: Request, res: Response): Promise<vo
 
 // Get all projects
 const getAllProjects = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-    try {
         const projects = await projectRepository.getAllProject();
         res.status(200).json(projects);
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({
-            message: "Internal server error"
-        });
-    }
 });
 
 // Get a single project
@@ -55,7 +46,7 @@ const getProject = asyncHandler(async (req: Request, res: Response): Promise<voi
         const project = await projectRepository.getProjectById(id);
         res.status(200).json(project);
     } catch (error) {
-        console.error(error);
+        
         res.status(500).json({
             message: "Internal server error"
         });
@@ -86,7 +77,7 @@ const updateProject = asyncHandler(async (req: Request, res: Response): Promise<
         const updateProject = await projectRepository.updateProject(id, projectData);
         res.status(200).json({ updateProject: updateProject,message:"Project updated successful" });
     } catch (error) {
-        console.error(error);
+        
         res.status(500).json({
             message: "Internal server error"
         });
@@ -101,7 +92,7 @@ const deleteProject = asyncHandler(async (req: Request, res: Response): Promise<
         await projectRepository.deleteProject(id);
         res.status(200).json({ message: "Project and associated comments deleted" });
     } catch (error) {
-        console.error(error);
+        
         res.status(500).json({
             message: "Internal server error"
         });

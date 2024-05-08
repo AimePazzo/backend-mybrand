@@ -125,7 +125,7 @@ authRouter.get('/get-users', userController.getAllUsers);
  *           $ref: '#/definitions/User'
  */
 
-authRouter.get('/user/get-user/:id', userController.getUser);
+authRouter.get('/get-user/:id', userController.getUser);
 
 /**
  * @swagger

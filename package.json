@@ -17,11 +17,8 @@
     ],
     "exclude": [
       "src/database/**/*.*",
-      "src/_tests_/**/*.*",
-      "src/modules/**/repository/*.ts",
-      "src/modules/comment/*",
-      "src/middlewares/**/*",
-      "src/utils/**/*"
+      "src/_tests_/**/*.*"
+      
 
     ],
     "reporter": [
