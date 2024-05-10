@@ -74,13 +74,14 @@ describe('Project Test', () => {
 
     //failed to authenticate token
     it('should return failed to authenticate token', (done) => {
+        const wrongToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MzNiNjcwZGNiYTZhYWZlMTFiOTc2ZiIsImlhdCI6MTcxNTE4MDkyNiwiZXhwIjoxNzE1MTk1MzI2fQ.jBp01UZ_JQ9t2ySwBvTnt_J0lE-idN5A3PWqklw4gTA'
         router()
             .post('/api/v1/project/post-project')
             .field('title', 'New Project')
             .field('description', 'Project description')
             .field('field', 'Field')
             .attach("image", fileBuffer, 'BUILD.txt')
-            .set('authorization','Bearer ' +'vybgvhtncjgyb234r8t57483vybncmchgvbhfndmdfetghf3hygurmex,owpzv,o./s/.,,')
+            .set('authorization','Bearer ' +`${wrongToken}`)
             .end((err, res) => {
                 expect(401)
                 done(err);
