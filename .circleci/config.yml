@@ -9,7 +9,7 @@ version: 2.1
 # See: https://circleci.com/docs/orb-intro/
 orbs:
   # See the Node orb documentation here: https://circleci.com/developer/orbs/orb/circleci/node
-  node: circleci/node@21.7.1
+  node: circleci/node@5.2
 
 jobs:
   # Below is the definition of your job to build and test your app, you can rename and customize it as you want.
@@ -31,7 +31,7 @@ jobs:
       # The orb install-packages step will also automatically cache them for faster future runs.
       - node/install-packages:
           # If you are using yarn, change the line below from "npm" to "yarn"
-          pkg-manager: npm install
+          pkg-manager: npm
       - run:
           name: Run tests
           command: npm test
