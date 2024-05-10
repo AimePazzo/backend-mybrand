@@ -11,6 +11,6 @@ export  const errorHandler = (err: Error, req: Request, res: Response, next: Nex
     res.json({
       status: "fail",
       message: err instanceof Error ? err.message : "Internal Server Error",
-      stack: process.env.NODE_ENV === "production" ? "🥞" : err?.stack, 
+      stack: process.env.NODE_ENV === "production" ? "🥞" : err.stack, 
     });
   };

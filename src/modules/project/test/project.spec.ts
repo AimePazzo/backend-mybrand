@@ -66,11 +66,6 @@ describe('Project Test', () => {
     it('should return not token', (done) => {
         router()
             .post('/api/v1/project/post-project')
-            .field('title', 'New Project')
-            .field('description', 'Project description')
-            .field('field', 'Field')
-            .attach("image", fileBuffer, 'BUILD.txt')
-
             .end((err, res) => {
                 expect(401)
                 done(err);
