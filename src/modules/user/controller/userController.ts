@@ -165,7 +165,7 @@ const loginAdmin = asyncHandler(async (req: Request, res: Response): Promise<voi
             return;
         }
 
-        if (await findAdmin?.isPasswordMatched(password)) {
+        if (await findAdmin.isPasswordMatched(password)) {
             const token = generateToken(findAdmin._id);
             res.status(200).json({
                 _id: findAdmin._id,
