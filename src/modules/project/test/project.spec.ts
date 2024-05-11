@@ -74,13 +74,14 @@ describe('Project Test', () => {
 
     //failed to authenticate token
     it('should return failed to authenticate token', (done) => {
+        
         router()
             .post('/api/v1/project/post-project')
             .field('title', 'New Project')
             .field('description', 'Project description')
             .field('field', 'Field')
             .attach("image", fileBuffer, 'BUILD.txt')
-            .set('authorization','Bearer ' +'vybgvhtncjgyb234r8t57483vybncmchgvbhfndmdfetghf3hygurmex,owpzv,o./s/.,,')
+            .set('authorization','Bearer ' +`${process.env.WRONG_TOKEN}`)
             .end((err, res) => {
                 expect(401)
                 done(err);
