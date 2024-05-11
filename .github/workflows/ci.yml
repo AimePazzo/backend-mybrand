@@ -22,6 +22,7 @@ env:
   BASE_URL_ONLINE: ${{ secrets.BASE_URL_ONLINE }}
   BASE_URL_LOCAL: ${{ secrets.BASE_URL_LOCAL }}
   WRONG_TOKEN: ${{ secrets.WRONG_TOKEN }}
+  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
 jobs:
   build:
@@ -42,6 +43,6 @@ jobs:
       - run: npm ci
       - run: npm run build --if-present
       - run: npm test
-      
+
       - name: Coveralls
       uses: coverallsapp/github-action@v2
