@@ -5,6 +5,26 @@ on:
   pull_request:
     branches:
       - master
+env:
+  PORT: ${{ secrets.PORT }}
+  MONGODB_URL: ${{ secrets.MONGODB_URL }}
+  JWT_SECRETKEY: ${{ secrets.JWT_SECRETKEY }}
+  JWT_EXPIRE: ${{ secrets.JWT_EXPIRE }}
+  NODE_ENV: ${{ secrets.NODE_ENV }}
+  CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
+  API_KEY: ${{ secrets.API_KEY }}
+  API_SECRET: ${{ secrets.API_SECRET }}
+  MAIL_ID: ${{ secrets.MAIL_ID }}
+  MP: ${{ secrets.MP }}
+  SMTP_HOST: ${{ secrets.SMTP_HOST }}
+  SMTP_HOST_PORT: ${{ secrets.SMTP_HOST_PORT }}
+  ADMIN: ${{ secrets.ADMIN }}
+  PASSWORD: ${{ secrets.PASSWORD }}
+  BASE_URL: ${{ secrets.BASE_URL }}
+  BASE_URL_ONLINE: ${{ secrets.BASE_URL_ONLINE }}
+  BASE_URL_LOCAL: ${{ secrets.BASE_URL_LOCAL }}
+  WRONG_TOKEN: ${{ secrets.WRONG_TOKEN }}
+  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
 jobs:
   build:
