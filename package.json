@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon server.ts",
     "test": "mocha --require ts-node/register './src/modules/**/*.spec.ts' --timeout 300000 --exit",
+    "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test | coveralls",
     "coverage": "nyc mocha --require ts-node/register 'src/modules/**/*.spec.ts' --timeout 300000 --exit"
   },
   "nyc": {
