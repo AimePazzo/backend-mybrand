@@ -33,7 +33,9 @@ jobs:
           when: always
       - run:
           name: Upload coverage to Coveralls
-          command: npx coveralls < ./coverage/lcov.info
+          command: npx coveralls < coverage/lcov.info
+          env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       - run:
           name: Setup Code Climate test-reporter
           command: |
