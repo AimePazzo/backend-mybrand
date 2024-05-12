@@ -25,7 +25,7 @@ env:
   BASE_URL_ONLINE: ${{ secrets.BASE_URL_ONLINE }}
   BASE_URL_LOCAL: ${{ secrets.BASE_URL_LOCAL }}
   WRONG_TOKEN: ${{ secrets.WRONG_TOKEN }}
-  COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+  CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
 
 jobs:
   build:
