@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "nodemon server.ts",
     "test": "mocha --require ts-node/register './src/modules/**/*.spec.ts' --timeout 300000 --exit",
+    "coveralls": "nyc --reporter=lcov --reporter=text-lcov npm test | coveralls",
     "coverage": "nyc mocha --require ts-node/register 'src/modules/**/*.spec.ts' --timeout 300000 --exit"
   },
   "nyc": {
@@ -18,8 +19,6 @@
     "exclude": [
       "src/database/**/*.*",
       "src/_tests_/**/*.*"
-      
-
     ],
     "reporter": [
       "html",
@@ -62,6 +61,7 @@
     "chai-http": "^4.4.0",
     "cloudinary": "^2.2.0",
     "cors": "^2.8.5",
+    "coveralls": "^3.1.1",
     "crypto": "^1.0.1",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
